@@ -10,7 +10,7 @@ typedef struct nodo_linea * Linea;
 typedef struct nodo_archivo * Archivo;
 typedef struct str_papelera * Papelera;
 
-
+// hola soy fito
 // DEFINIMOS FUNCION ERROR
 enum retorno{
     OK, ERROR, NO_IMPLEMENTADA
