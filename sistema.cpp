@@ -15,33 +15,6 @@ Sistema crearSistema(){
     return aux;
 }
 
-Archivo crearArchivo(){
-    Archivo aux = new struct  nodo_archivo;
-    aux->nombre[0]    = '\0';
-    aux->extension[0] = '\0';
-    aux->tamanio      = 0;
-    aux->sig          = NULL;
-    aux->ant          = NULL;
-    aux->lprimero     = NULL;
-    aux->lultimo      = NULL;
-    return aux;
-}
-
-Linea crearLinea(){
-    Linea aux = new struct  nodo_linea;
-    aux->renglon[0]   = '\0';
-    aux->sig          = NULL;
-    aux->ant          = NULL;
-    return aux;
-}
-
-Papelera crearPapelera(){
-    Papelera p = new struct str_papelera;
-    p->sig          = NULL;
-    p->deleted_arch = NULL;
-    return p;
-}
-
 
 // FUNCION INIT CREA EL SISTEMA LOS ARCHIVOS Y LAS LINEAS
 void init (Sistema &s, Archivo &a, Linea &l, Papelera &p){
@@ -372,30 +345,6 @@ TipoRet TYPE( Sistema &s, char nombreArchivo[]/*, char error[]*/ ){
 
 
 //----------- REVISAR COMENTARIOS-----------------------------------------
-TipoRet DIRPAPELERA(Papelera &p/*, char * parametro, char &error[]*/){
-  char mensaje[100];
-  TipoRet Respuesta;
-  Respuesta = OK;
-
-  cout << "\n Dir-Papelera:  " << endl;
-  if(p == NULL){
-    cout << "Error: No hay archivos para mostrar" << endl;
-    Respuesta = ERROR;
-
-  }else{ // Hay que ir recorriendo el sistema hasta NULL
-    Papelera pap = p;
-
-    // Hay que ir recorriendo el sistema hasta NULL
-    while(!isEmptyStack(pap)){
-      cout << pap->deleted_arch->nombre << endl; //Imprimo el renglon
-      pap = pap->sig;
-    };
-
-  }
-
-  cout << "\n " << endl;
-  return Respuesta;
-}
 
 //PRE: El archivo a eliminar debe estar creado
 //POST: "Borra" un archivo del sistema
@@ -491,7 +440,7 @@ TipoRet DELETE(Sistema& s, char nombreArchivo[]/*, char& error[]*/) {
 //PRE: El archivo debe estar creado
 //POST: Devuelve el archivo con k menos lineas al final
 TipoRet BF(Sistema &s, char nombreArchivo[], int k/*, char error[]*/) {
-  
+
   TipoRet Respuesta;
   char mensaje[TEXTO_LARGO]; //texto de la linea o del error
   char nom[NOMBRE_MAX]; //nombre del archivo partido
@@ -977,56 +926,4 @@ bool okComillas(char texto[]){
   // }else{
   //   return false;
   // }
-}
-
-
-//------------------------------------------------------------------------------------------------
-//Funciones auxiliares para implementar el DELETE y UNDELET
-//REVISAR
-
-
-void push(Papelera &p, Archivo aux){
-  Papelera papNuevo = new struct str_papelera;
-  Archivo archNuevo = new struct nodo_archivo;
-
-  strcpy(archNuevo->nombre,aux->nombre);
-  strcpy(archNuevo->extension,aux->extension);
-  archNuevo->tamanio    = aux->tamanio;
-  archNuevo->lprimero   = aux->lprimero;
-  archNuevo->lultimo    = aux->lultimo;
-
-  //guardamos el anterior y el siguiente del archivo que estoy guardando para
-  //el UNDELETE, para saber donde ubcarlo.
-  archNuevo->ant = aux->ant;
-  archNuevo->sig = aux->sig;
-
-  papNuevo->deleted_arch = archNuevo;
-  if(!isEmptyStack(p)){ // Este if no funciona correctamente pero realiza lo que necesito de todas formas
-    papNuevo->sig = p;
-  }else{
-    papNuevo->sig = NULL;
-  }
-
-  p = papNuevo;
-
-}
-
-bool isEmptyStack(Papelera p){
-  return (p == NULL);
-}
-Archivo pop(Papelera &p){
-   Archivo arch = p->deleted_arch;
-   Papelera post = p;
-   p = p->sig;
-   return arch;
-   delete post; //DUDA sobre si hay que borrar este espacio de memory
-}
-
-int height(Papelera p){
-   int cont = 0;
-   while(!isEmptyStack){
-        cont ++;
-        p = p->sig;
-   }
-   return cont;
 }
