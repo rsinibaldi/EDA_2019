@@ -5,7 +5,6 @@
 
 #include "sistema.h"
 
-Hola fito
 
 // Colocamos esto aqui para poder debugear el codigo
 using namespace std;
