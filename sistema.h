@@ -1,29 +1,25 @@
 #ifndef SISTEMA_H
 #define SISTEMA_H
 
+#include "enum.h"
 #include "constantes.h"
 #include "archivo.h"
+#include "papelera.h"
 #include "directorio.h"
 
 
-typedef struct nodo_linea * Linea;
-typedef struct nodo_archivo * Archivo;
-typedef struct str_papelera * Papelera;
-
-
-// DEFINIMOS FUNCION ERROR
-enum retorno{
-    OK, ERROR, NO_IMPLEMENTADA
-};typedef enum retorno TipoRet;
 
 // DEFINIMOS SISTEMA
 struct str_sistema{
     Directorio directorio;
+   
+   //Inicio quitar
     Archivo aprimero;
     Archivo aultimo;
 
     //Papelera
     Papelera papelera;
+    //Fin quitar
 
 };typedef str_sistema * Sistema;
 
@@ -93,7 +89,7 @@ TipoRet UNDELETE(Sistema &s/*, char &error*/);
 
 //PRE:El archivo debe estar creado
 //POST:Devulve la cantidad de filas de un archivo
-int CantLineas(Linea l);
+//int CantLineas(Linea l);
 
 //PRE: la lista sistema debe estar creada;
 //POST: Devuele true si la lista es vacia, false en otro caso.
@@ -101,23 +97,23 @@ bool isEmptySistema(Sistema s);
 
 //PRE: La lista archivos debe estar creada
 //POST: Devuelve true si la lista es vacia, false en otro caso
-bool isEmptyArchivo(Archivo a);
+//bool isEmptyArchivo(Archivo a);
 
 //PRE: La lista de lineas debe estar creada
 //POST: Devuelve true si la lista es vacia, false en otro caso
-bool isEmptyArchivoLineas(Linea l);
+//bool isEmptyArchivoLineas(Linea l);
 
 //PRE: recibe una lista con por lo menos 1 elemento.
 //POST: Retorna la lista sin su primer elemento.
-Archivo TailArchivo(Archivo a);
+//Archivo TailArchivo(Archivo a);
 
 //PRE: la lista de archivos debe contener al menos un archivo
 //POST: Compara nom y ext con los archivos de la lista para saber si estan repetidos
-bool existeArchivo(Archivo ArchivosCol, char nom[], char ext[]);
+//bool existeArchivo(Archivo ArchivosCol, char nom[], char ext[]);
 
 //PRE: deben haber archivos sino no imprime
 //POST: muestra toda la coleccion de archivos
-void Imprimir_archivos(Archivo arch);
+//void Imprimir_archivos(Archivo arch);
 
 //pre: recibe una ListaArchivos creada.
 //pos: busca en la lista el archivo y lo devuelve.
