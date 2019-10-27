@@ -6,7 +6,7 @@
 #include "archivo.h"
 #include "sistema.h"
 
-typedef struct nodo_archivo * Archivo;
+
 struct str_directorio{
   char nombre[NOMBRE_MAX];
   int cota;
