@@ -64,7 +64,7 @@ Archivo pop(Papelera &p);
 int height(Papelera p);
 
 
-TipoRet DIRPAPELERA(Papelera &p/*, char * parametro, char &error[]*/);
+//TipoRet DIRPAPELERA(Papelera &p/*, char * parametro, char &error[]*/);
 
 
 #endif //ARCHIVO_H

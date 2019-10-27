@@ -94,27 +94,27 @@ int height(Papelera p){
 }
 
 
-TipoRet DIRPAPELERA(Papelera &p/*, char * parametro, char &error[]*/){
-  char mensaje[100];
-  TipoRet Respuesta;
-  Respuesta = OK;
-
-  cout << "\n Dir-Papelera:  " << endl;
-  if(p == NULL){
-    cout << "Error: No hay archivos para mostrar" << endl;
-    Respuesta = ERROR;
-
-  }else{ // Hay que ir recorriendo el sistema hasta NULL
-    Papelera pap = p;
-
-    // Hay que ir recorriendo el sistema hasta NULL
-    while(!isEmptyStack(pap)){
-      cout << pap->deleted_arch->nombre << endl; //Imprimo el renglon
-      pap = pap->sig;
-    };
-
-  }
-
-  cout << "\n " << endl;
-  return Respuesta;
-}
+// TipoRet DIRPAPELERA(Papelera &p/*, char * parametro, char &error[]*/){
+//   char mensaje[100];
+//   TipoRet Respuesta;
+//   Respuesta = OK;
+//
+//   cout << "\n Dir-Papelera:  " << endl;
+//   if(p == NULL){
+//     cout << "Error: No hay archivos para mostrar" << endl;
+//     Respuesta = ERROR;
+//
+//   }else{ // Hay que ir recorriendo el sistema hasta NULL
+//     Papelera pap = p;
+//
+//     // Hay que ir recorriendo el sistema hasta NULL
+//     while(!isEmptyStack(pap)){
+//       cout << pap->deleted_arch->nombre << endl; //Imprimo el renglon
+//       pap = pap->sig;
+//     };
+//
+//   }
+//
+//   cout << "\n " << endl;
+//   return Respuesta;
+// }
