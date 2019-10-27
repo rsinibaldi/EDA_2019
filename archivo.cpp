@@ -88,12 +88,12 @@ Linea crearLinea(){
     return aux;
 }
 
-Papelera crearPapelera(){
-    Papelera p = new struct str_papelera;
-    p->sig          = NULL;
-    p->deleted_arch = NULL;
-    return p;
-}
+// Papelera crearPapelera(){
+//     Papelera p = new struct str_papelera;
+//     p->sig          = NULL;
+//     p->deleted_arch = NULL;
+//     return p;
+// }
 
 
 
@@ -103,51 +103,51 @@ Papelera crearPapelera(){
 //REVISAR
 
 
-void push(Papelera &p, Archivo aux){
-  Papelera papNuevo = new struct str_papelera;
-  Archivo archNuevo = new struct nodo_archivo;
-
-  strcpy(archNuevo->nombre,aux->nombre);
-  strcpy(archNuevo->extension,aux->extension);
-  archNuevo->tamanio    = aux->tamanio;
-  archNuevo->lprimero   = aux->lprimero;
-  archNuevo->lultimo    = aux->lultimo;
-
-  //guardamos el anterior y el siguiente del archivo que estoy guardando para
-  //el UNDELETE, para saber donde ubcarlo.
-  archNuevo->ant = aux->ant;
-  archNuevo->sig = aux->sig;
-
-  papNuevo->deleted_arch = archNuevo;
-  if(!isEmptyStack(p)){ // Este if no funciona correctamente pero realiza lo que necesito de todas formas
-    papNuevo->sig = p;
-  }else{
-    papNuevo->sig = NULL;
-  }
-
-  p = papNuevo;
-
-}
-
-bool isEmptyStack(Papelera p){
-  return (p == NULL);
-}
-Archivo pop(Papelera &p){
-   Archivo arch = p->deleted_arch;
-   Papelera post = p;
-   p = p->sig;
-   return arch;
-   delete post; //DUDA sobre si hay que borrar este espacio de memory
-}
-
-int height(Papelera p){
-   int cont = 0;
-   while(!isEmptyStack){
-        cont ++;
-        p = p->sig;
-   }
-   return cont;
-}
+// void push(Papelera &p, Archivo aux){
+//   Papelera papNuevo = new struct str_papelera;
+//   Archivo archNuevo = new struct nodo_archivo;
+//
+//   strcpy(archNuevo->nombre,aux->nombre);
+//   strcpy(archNuevo->extension,aux->extension);
+//   archNuevo->tamanio    = aux->tamanio;
+//   archNuevo->lprimero   = aux->lprimero;
+//   archNuevo->lultimo    = aux->lultimo;
+//
+//   //guardamos el anterior y el siguiente del archivo que estoy guardando para
+//   //el UNDELETE, para saber donde ubcarlo.
+//   archNuevo->ant = aux->ant;
+//   archNuevo->sig = aux->sig;
+//
+//   papNuevo->deleted_arch = archNuevo;
+//   if(!isEmptyStack(p)){ // Este if no funciona correctamente pero realiza lo que necesito de todas formas
+//     papNuevo->sig = p;
+//   }else{
+//     papNuevo->sig = NULL;
+//   }
+//
+//   p = papNuevo;
+//
+// }
+//
+// bool isEmptyStack(Papelera p){
+//   return (p == NULL);
+// }
+// Archivo pop(Papelera &p){
+//    Archivo arch = p->deleted_arch;
+//    Papelera post = p;
+//    p = p->sig;
+//    return arch;
+//    delete post; //DUDA sobre si hay que borrar este espacio de memory
+// }
+//
+// int height(Papelera p){
+//    int cont = 0;
+//    while(!isEmptyStack){
+//         cont ++;
+//         p = p->sig;
+//    }
+//    return cont;
+// }
 
 
 // TipoRet DIRPAPELERA(Papelera &p/*, char * parametro, char &error[]*/){
