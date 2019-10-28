@@ -12,7 +12,7 @@
 // DEFINIMOS SISTEMA
 struct str_sistema{
     Directorio directorio;
-   
+
    //Inicio quitar
     Archivo aprimero;
     Archivo aultimo;

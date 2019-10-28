@@ -123,6 +123,8 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
             strcat(nombreArchivoActual,".");
             strcat(nombreArchivoActual,ArchivosCol->extension);
 
+            int aa = strcmp(nomCompleto,nombreArchivoActual);
+            std::cout << "create strcmp: " << aa << '\n';
             // Compara, si es menor va antes
             if(strcmp(nomCompleto,nombreArchivoActual) < 0 ){
               encontre = true;
