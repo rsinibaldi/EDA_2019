@@ -126,8 +126,11 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
             int aa = strcmp(nomCompleto,nombreArchivoActual);
             std::cout << "create strcmp: " << aa << '\n';
             // Compara, si es menor va antes
-            if(strcmp(nomCompleto,nombreArchivoActual) < 0 ){
+            if(strcmp(nomCompleto,nombreArchivoActual) < 0){
               encontre = true;
+            // }else if(ArchivosCol->sig != NULL){
+            //   cout << " else if .. encontro " << endl;
+            //   encontre = true;
             }else{
               ArchivosCol = TailArchivo(ArchivosCol);
             }
@@ -139,7 +142,17 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
           }
 
           //Estudiamos donde colocar
-          if(ArchivosCol->ant == NULL){
+          if((ArchivosCol->ant == NULL) && (ArchivosCol->sig == NULL) && (strcmp(nomCompleto,nombreArchivoActual) > 0)){
+            //Si solo se inserto el primer archivo/directorio quiere decir que mi anterior y mi siguiente es NULL y 
+            //mi nombre de archivo es mayor al ultimo nombre de archivo recorrido en el while. (rebuscado para mi gusto...pero funciona!)
+            nuevo->sig        = NULL;
+            nuevo->ant        = ArchivosCol;
+            nuevo->lprimero = NULL;
+            nuevo->lultimo = NULL;
+            ArchivosCol->sig  = nuevo;
+            s->aultimo        = nuevo;
+
+          }else if(ArchivosCol->ant == NULL){
             //Si hay que ingresar en el primer lugar
             nuevo->ant        = NULL;
             nuevo->sig        = ArchivosCol;
