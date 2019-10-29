@@ -41,11 +41,12 @@ int main(){
 
     //Inicializamos
     Sistema s;
-	Archivo a;
-	Linea l;
-	Papelera p;
+		Directorio d;
+		Archivo a;
+		Linea l;
+		Papelera p;
 
-	init(s, a, l, p);
+	init(s, a, l, p, d);
 
 
 
@@ -100,7 +101,7 @@ int main(){
 
 */
 
-            strcpy(comando,strtok(entradaCompleta, " "));
+      strcpy(comando,strtok(entradaCompleta, " "));
 			strcpy(entradaSinComando,strtok(NULL, "\n"));
 
  		}else{
@@ -113,11 +114,11 @@ int main(){
 
  		//Comparamos los comandos y llamamos
  		if(strcmp(comando,"DIR")==0){
- 			respuesta = DIR (s);
+ 			respuesta = DIR2(s,entradaSinComando);
 
 
  		}else if(strcmp(comando,"CREATE") == 0){
- 			respuesta = CREATE (s, entradaSinComando);
+ 			respuesta = CREATE(s, entradaSinComando);
 
 
 

@@ -8,36 +8,49 @@
 // Colocamos esto aqui para poder debugear el codigo
 using namespace std;
 
-//
-// //pre: n/a
-// //post: retorna el arbol vacio.
-// Directorio vacio(){
-//     return NULL;
-// }
-//
-// //post: retorna true si a es vacio, false en otro caso.
-// bool esVacio(Directorio d){
-//     return a == NULL;
-// }
-//
+//pre: n/a
+//post: retorna el arbol vacio. (Inicializado)
+Directorio crearDirectorio(){
+  Directorio aux = new struct  str_directorio;
+  aux->nombre[0]        = '\\';
+  aux->cota             = 0;
+  aux->tamanio          = 0;
+  aux->ruta_absoluta[0] = '\\';
+  aux->aprimero         = NULL;
+  aux->aultimo          = NULL;
+
+  return aux;
+}
+
+//pre: n/a
+//post: retorna el arbol vacio.
+Directorio vacio(){
+    return NULL;
+}
+
+//post: retorna true si a es vacio, false en otro caso.
+bool isEmptyDirectorio(Directorio d){
+    return d == NULL;
+}
+
 // //pre: a no es vacio.
 // //post: retorna el valor de la raiz de a.
 // int valor(Directorio d){
 //     return a->valor;
 // }
-//
-// //pre: a no es vacio
-// //post: retorna la direccion del subarbol izquierdo de a.
-// Directorio hijoIzq(Directorio d){
-//     return a->izq;
-// }
-//
-// //pre: a no es vacio
-// //post: retorna la direccion del subarbol derecho de a.
-// Directorio hijoDer(Directorio d){
-//     return a->der;
-// }
-//
+
+//pre: a no es vacio
+//post: retorna la direccion del subarbol izquierdo de a.
+Directorio siguienteDir(Directorio d){
+    return d->izq;
+}
+
+//pre: a no es vacio
+//post: retorna la direccion del subarbol derecho de a.
+Directorio subDir(Directorio d){
+    return d->der;
+}
+
 // //pre: n/a
 // //post:retorna la direccion del nodo con valor x;
 // //     devuelve un Directorio vacio en caso de no encontrar x.
@@ -127,10 +140,10 @@ using namespace std;
 //         inOrden(hijoDer(a));
 //     }
 // }
-//
-// //pre: n/a
-// //post: lista los valores de los nodos de a,
-// //      cuando recorremos en arbol en preorden.
+
+//pre: n/a
+//post: lista los valores de los nodos de a,
+//      cuando recorremos en arbol en preorden.
 // void preOrden(Directorio d){
 //     if (!esVacio(a)){
 //         printf(" %d ", valor(a));
@@ -138,7 +151,17 @@ using namespace std;
 //         preOrden(hijoDer(a));
 //     }
 // }
-//
+void Imprimir_directorios(Directorio d, char parametro[]){
+  if(parametro == NULL){
+    if (!isEmptyDirectorio(d)){
+        cout << d->nombre << "     " << "Directorio" << endl; //Imprimo el renglon
+        Imprimir_directorios(siguienteDir(d),parametro);
+    }
+  }else{
+    //Imprimo directorios y sub Directorios
+  }
+}
+
 // //pre: n/a
 // //post: lista los valores de los nodos de a,
 // //      cuando recorremos el arbol en postorden.

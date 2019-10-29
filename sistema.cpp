@@ -10,23 +10,29 @@ using namespace std;
 
 Sistema crearSistema(){
     Sistema aux = new struct  str_sistema;
+    aux->directorio = NULL;
+    aux->dirActual  = NULL;
     aux->aprimero   = NULL;
     aux->aultimo    = NULL;
+    aux->papelera   = NULL;
     return aux;
 }
 
 
 // FUNCION INIT CREA EL SISTEMA LOS ARCHIVOS Y LAS LINEAS
-void init (Sistema &s, Archivo &a, Linea &l, Papelera &p){
+void init (Sistema &s, Archivo &a, Linea &l, Papelera &p, Directorio &d){
  	s = crearSistema();
  	a = crearArchivo();
  	l = crearLinea();
   p = crearPapelera();
+  d = crearDirectorio();
 
   // a->lprimero = l;
   // a->lultimo  = l;
   // s->aprimero = a;
   // s->aultimo  = a;
+  s->directorio = d;
+  s->dirActual = d;
   s->papelera = p;
  }
 
@@ -55,6 +61,40 @@ TipoRet DIR(Sistema &s/*, char * parametro, char &error[]*/){
     return Respuesta;
 }
 
+TipoRet DIR2(Sistema &s, char parametro[]/*, char &error[]*/){
+  TipoRet Respuesta;
+  char mensaje[TEXTO_LARGO];
+  Directorio dirActual;
+  Directorio auxSubDir;
+  Archivo aux_archivo;
+
+  if(isEmptyDirectorio(s->dirActual)){
+    strcpy (mensaje, "No hay archivos en el sistema");
+    Respuesta = ERROR;
+  }else{
+    dirActual   = s->dirActual;
+    auxSubDir   = subDir(dirActual);
+    aux_archivo = dirActual->aprimero;
+  }
+
+  if((isEmptyDirectorio(auxSubDir)) && (isEmptyArchivo(aux_archivo))){
+    strcpy (mensaje, "El directorio se encuentra vacío");
+    Respuesta = ERROR;
+  }else{
+      // Hay que ir recorriendo el sistema hasta NULL
+      if(!isEmptyArchivo(aux_archivo)){
+        Imprimir_archivos(aux_archivo);
+      }
+
+      // if(!isEmptyDirectorio(auxSubDir)){
+      //   Imprimir_directorios(auxSubDir, parametro);
+      // }
+      Respuesta = OK;
+    }
+    cout << "\n " << endl;
+    return Respuesta;
+}
+
 //PRE: No Tiene
 //POST: Crea un archivo nuevo en el sistema (Si cumple con las comprobaciones)
 TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
@@ -63,11 +103,15 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
     char mensaje[TEXTO_LARGO]; // para mostrar el error en la pantalla
 
     Archivo nuevo = new struct nodo_archivo;
+    Directorio dirActual;
     char nombreArchivoActual[ARCH_NOM_MAX];
     char nom[NOMBRE_MAX];
     char ext[EXT_MAX];
     char aux[200];
     bool encontre = false;
+
+    //Nos quedamos con el directorio actual
+    dirActual   = s->directorio;
 
     //Guardamos en nombre antes de partirlo (para poder guardar ordenado)
     char nomCompleto[ARCH_NOM_MAX];
@@ -92,20 +136,24 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
 	    strcpy(nuevo->extension,aux);
 	    nuevo->tamanio = 0;
 
-	   if (isEmptySistema(s)) {
+	   // if (isEmptySistema(s)) {
+     if (isEmptyArchivo(dirActual->aprimero)) {
          //Sistema vacio
-         s->aprimero = nuevo;
-         s->aultimo  = nuevo;
-         nuevo->sig  = NULL;
-         nuevo->ant  = NULL;
-         nuevo->lprimero = NULL;
-         nuevo->lultimo = NULL;
+         nuevo->sig           = NULL;
+         nuevo->ant           = NULL;
+         nuevo->lprimero      = NULL;
+         nuevo->lultimo       = NULL;
+         dirActual->aprimero  = nuevo;
+         dirActual->aultimo   = nuevo;
+         s->dirActual         = dirActual;
+
          strcpy (mensaje, "Se ha creado el archivo.");
          Respuesta = OK;
 	   }else{
         //Hay archivos en el sistema, comprobamos su existencia
         //Para hacerlo, nos guardamos la posicion del primer archivo
-	      Archivo ArchivosCol = s->aprimero;
+        //dirActual   = s->directorio;
+	      Archivo ArchivosCol = dirActual->aprimero;
 
         if(existeArchivo(ArchivosCol, nom, ext)){
           //El archivo existe y por lo tanto no podemos crearlo
@@ -114,7 +162,7 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
         } else {
 
           //Restablecemos ArchivosCol al inicio ya que la funcion existeArchivo lo mueve
-          ArchivosCol = s->aprimero;
+          ArchivosCol = dirActual->aprimero;
           //Mientras no llegue al final y no encuentre lugar donde colocar el archivo ordenado
           while((ArchivosCol != NULL) && (encontre == false)){
 
@@ -123,8 +171,6 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
             strcat(nombreArchivoActual,".");
             strcat(nombreArchivoActual,ArchivosCol->extension);
 
-            int aa = strcmp(nomCompleto,nombreArchivoActual);
-            std::cout << "create strcmp: " << aa << '\n';
             // Compara, si es menor va antes
             if(strcmp(nomCompleto,nombreArchivoActual) < 0){
               encontre = true;
@@ -138,19 +184,20 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
 
           //No encontre donde colocar el archivo asi que va a lo ultimo
           if(!encontre){
-            ArchivosCol = s->aultimo;
+            ArchivosCol = dirActual->aultimo;
           }
 
           //Estudiamos donde colocar
           if((ArchivosCol->ant == NULL) && (ArchivosCol->sig == NULL) && (strcmp(nomCompleto,nombreArchivoActual) > 0)){
-            //Si solo se inserto el primer archivo/directorio quiere decir que mi anterior y mi siguiente es NULL y 
+            //Si solo se inserto el primer archivo/directorio quiere decir que mi anterior y mi siguiente es NULL y
             //mi nombre de archivo es mayor al ultimo nombre de archivo recorrido en el while. (rebuscado para mi gusto...pero funciona!)
             nuevo->sig        = NULL;
             nuevo->ant        = ArchivosCol;
             nuevo->lprimero = NULL;
             nuevo->lultimo = NULL;
             ArchivosCol->sig  = nuevo;
-            s->aultimo        = nuevo;
+            dirActual->aultimo        = nuevo;
+            s->dirActual         = dirActual;
 
           }else if(ArchivosCol->ant == NULL){
             //Si hay que ingresar en el primer lugar
@@ -159,7 +206,8 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
             nuevo->lprimero = NULL;
             nuevo->lultimo = NULL;
             ArchivosCol->ant  = nuevo;
-            s->aprimero       = nuevo;
+            dirActual->aprimero       = nuevo;
+            s->dirActual         = dirActual;
 
           }else if((ArchivosCol->sig == NULL) && (!encontre)){
             //Si estoy en el ultimo lugar ingreso al final
@@ -168,7 +216,8 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
             nuevo->lprimero = NULL;
             nuevo->lultimo = NULL;
             ArchivosCol->sig  = nuevo;
-            s->aultimo        = nuevo;
+            dirActual->aultimo        = nuevo;
+            s->dirActual         = dirActual;
 
           }else{
             //Hay que colocar en el medio

@@ -21,25 +21,27 @@ struct str_directorio{
 
 };typedef struct str_directorio * Directorio;
 
-
+//pre: n/a
+//post: retorna el arbol vacio. (Inicializado)
+Directorio crearDirectorio();
 
 //pre: n/a
 //post: retorna el arbol vacio.
 Directorio vacio();
 
 //post: retorna true si a es vacio, false en otro caso.
-bool esVacio(Directorio d);
+bool isEmptyDirectorio(Directorio d);
 
 //post: retorna el valor de la raiz de a.
 int valor(Directorio d);
 
 //pre: a no es vacio
 //post: retorna la direccion del subarbol izquierdo de a.
-Directorio hijoIzq(Directorio d);
+Directorio siguienteDir(Directorio d);
 
 //pre: a no es vacio
 //post: retorna la direccion del subarbol derecho de a.
-Directorio hijoDer(Directorio d);
+Directorio subDir(Directorio d);
 
 //pre: n/a
 //post:retorna la direccion del nodo con nombre de directorio.
@@ -73,7 +75,7 @@ void inOrden(Directorio d);
 //pre: n/a
 //post: lista los valores de los nodos de a,
 //      cuando recorremos en arbol en preorden.
-void preOrden(Directorio d);
+void Imprimir_directorios(Directorio d, char parametro[]);
 
 //pre: n/a
 //post: lista los valores de los nodos de a,

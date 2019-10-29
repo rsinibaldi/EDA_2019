@@ -12,7 +12,7 @@
 // DEFINIMOS SISTEMA
 struct str_sistema{
     Directorio directorio;
-
+    Directorio dirActual;
    //Inicio quitar
     Archivo aprimero;
     Archivo aultimo;
@@ -29,7 +29,7 @@ struct str_sistema{
 // CREACIÓN SISTEMA
 // -----------------
 Sistema crearSistema();
-void init (Sistema &s, Archivo &a, Linea &l, Papelera &p);
+void init (Sistema &s, Archivo &a, Linea &l, Papelera &p, Directorio &d);
 
 
 // FUNCIONES TIPO 1
@@ -38,6 +38,7 @@ void init (Sistema &s, Archivo &a, Linea &l, Papelera &p);
 //PRE: No tiene, solo que si no hay arch no los puede mostrar
 //POST: Muestra los archivos creados en el sistema
 TipoRet DIR(Sistema &s/*, char parametro[], char &error*/);
+TipoRet DIR2(Sistema &s, char parametro[]/*, char &error*/);
 
 //PRE: No Tiene
 //POST: Crea un archivo nuevo en el sistema (Si cumple con las comprobaciones)
