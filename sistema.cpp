@@ -27,10 +27,6 @@ void init (Sistema &s, Archivo &a, Linea &l, Papelera &p, Directorio &d){
   p = crearPapelera();
   d = crearDirectorio();
 
-  // a->lprimero = l;
-  // a->lultimo  = l;
-  // s->aprimero = a;
-  // s->aultimo  = a;
   s->directorio = d;
   s->dirActual = d;
   s->papelera = p;
@@ -68,6 +64,10 @@ TipoRet DIR2(Sistema &s, char parametro[]/*, char &error[]*/){
   Directorio auxSubDir;
   Archivo aux_archivo;
 
+  if (parametro != NULL){
+    std::cout << "tenemos parametro: " << parametro << '\n';
+  }
+
   if(isEmptyDirectorio(s->dirActual)){
     strcpy (mensaje, "No hay archivos en el sistema");
     Respuesta = ERROR;
@@ -82,13 +82,13 @@ TipoRet DIR2(Sistema &s, char parametro[]/*, char &error[]*/){
     Respuesta = ERROR;
   }else{
       // Hay que ir recorriendo el sistema hasta NULL
-      if(!isEmptyArchivo(aux_archivo)){
+      if(!isEmptyArchivo(aux_archivo) && (parametro == NULL)){
         Imprimir_archivos(aux_archivo);
       }
 
-      // if(!isEmptyDirectorio(auxSubDir)){
-      //   Imprimir_directorios(auxSubDir, parametro);
-      // }
+      if(!isEmptyDirectorio(auxSubDir)){
+        Imprimir_directorios(auxSubDir, parametro);
+      }
       Respuesta = OK;
     }
     cout << "\n " << endl;
@@ -260,10 +260,10 @@ TipoRet IF(Sistema &s, char nombreArchivo[], char texto[]/*, char error[]*/){
   } else {
 
     //Primero nos hacemos una copia del primero para restablecer el sistema al final del proceso
-    Archivo dirPrim = s->aprimero;
+    Archivo dirPrim = s->dirActual->aprimero;
 
     //Ya que no es vacia copiamos el primer archivo de la lista para manejarla desde ahi
-    Archivo auxArchivos = s->aprimero;
+    Archivo auxArchivos = s->dirActual->aprimero;
 
     //Comprobamos que el texto a ingresar no supere los 50 caracteres
     if ((strlen(texto) > TEXTO_LARGO)) {
@@ -281,7 +281,7 @@ TipoRet IF(Sistema &s, char nombreArchivo[], char texto[]/*, char error[]*/){
 
       // Ya que el archivo existe en el sistema, hay que pararse sobre el para poder escribir
       // Fuerzo aux a ser el primero nuevamente porque la func existearchivo lo mueve de lugar
-      auxArchivos = s->aprimero;
+      auxArchivos = s->dirActual->aprimero;
       //Recorro la estructura para hayar el arch a escribir
       while ((auxArchivos != NULL) && (encontre == false)) {
         if ((strcmp(auxArchivos->nombre, nom) == 0) && (strcmp(auxArchivos->extension, ext) == 0)){
@@ -338,7 +338,7 @@ TipoRet IF(Sistema &s, char nombreArchivo[], char texto[]/*, char error[]*/){
     //Restablecemos la estructura sistema ya que se corrio para pararse sobre el arch
 
 
-    s->aprimero = dirPrim;
+    s->dirActual->aprimero = dirPrim;
 
 }
 cout << mensaje << endl;
@@ -367,7 +367,7 @@ TipoRet TYPE( Sistema &s, char nombreArchivo[]/*, char error[]*/ ){
    } else {
 
      //Para poder restablecer el sistema
-     Archivo auxArchivos = s->aprimero;
+     Archivo auxArchivos = s->dirActual->aprimero;
      //Recorro en busca del arch a leer
    	while ((auxArchivos != NULL) && (encontre == false)) {
       	if ((strcmp(auxArchivos->nombre, nom) == 0) && (strcmp(auxArchivos->extension, ext) == 0)){
@@ -423,7 +423,7 @@ TipoRet DELETE(Sistema& s, char nombreArchivo[]/*, char& error[]*/) {
       p = s->papelera;
 
       //para poder hacer las modificaciones en el sistema
-      Archivo aux = s->aprimero;
+      Archivo aux = s->dirActual->aprimero;
 
       //partimos el nomarch en nom y ext para poder usar la func existeArch y de esa manera ya guardar el mismo en la papelera
       strcpy(nom,strtok(nombreArchivo, "."));
@@ -442,7 +442,7 @@ TipoRet DELETE(Sistema& s, char nombreArchivo[]/*, char& error[]*/) {
     } else {
       // Ya que el archivo existe en el sistema, hay que pararse sobre el para poder mandarlo a la papelera
       // Fuerzo aux a ser el primero nuevamente porque la func existearchivo lo mueve de lugar
-      aux = s->aprimero;
+      aux = s->dirActual->aprimero;
 
       //Recorro la estructura para hayar el arch a escribir
       while ((aux != NULL) && (encontre == false)) {
@@ -466,20 +466,20 @@ TipoRet DELETE(Sistema& s, char nombreArchivo[]/*, char& error[]*/) {
 
           //Continuamos con la eliminacion
            if ((aux->sig  == NULL) && (aux->ant == NULL)){ //aca solo hay un archivo
-                  s->aprimero = NULL;
-                  s->aultimo = NULL;
+                  s->dirActual->aprimero = NULL;
+                  s->dirActual->aultimo = NULL;
                   Respuesta = OK;
                   strcpy (mensaje, "El archivo ha sido eliminado correctamente");
 
            }else if(aux->ant == NULL){    //tamos en el primero
-                  s->aprimero = s->aprimero->sig;
-                  s->aprimero->ant = NULL;
+                  s->dirActual->aprimero = s->dirActual->aprimero->sig;
+                  s->dirActual->aprimero->ant = NULL;
                   Respuesta = OK;
                   strcpy (mensaje, "El archivo ha sido eliminado correctamente");
 
            }else if(aux->sig == NULL){ //tamos en el ultimo
-                  s->aultimo = s->aultimo->ant;
-                  s->aultimo->sig = NULL;
+                  s->dirActual->aultimo = s->dirActual->aultimo->ant;
+                  s->dirActual->aultimo->sig = NULL;
                   Respuesta = OK;
                   strcpy (mensaje, "El archivo ha sido eliminado correctamente");
 
@@ -523,9 +523,9 @@ TipoRet BF(Sistema &s, char nombreArchivo[], int k/*, char error[]*/) {
     Respuesta = ERROR;
   } else {
     //Primero nos hacemos una copia del primero para restablecer el sistema al final del proceso
-    Archivo dirPrim = s->aprimero;
+    Archivo dirPrim = s->dirActual->aprimero;
     //Ya que no es vacia copiamos el primer archivo de la lista para manejarla desde ahi
-    Archivo auxArchivos = s->aprimero;
+    Archivo auxArchivos = s->dirActual->aprimero;
 
     if (!existeArchivo(auxArchivos, nom, ext)) {
       //Esta funcion comprueba sobre toda la lista de arch si hay coincidencia de nom y ext
@@ -534,7 +534,7 @@ TipoRet BF(Sistema &s, char nombreArchivo[], int k/*, char error[]*/) {
     } else {
       // Ya que el archivo existe en el sistema, hay que pararse sobre el para poder borrar las k lineas
       // Fuerzo aux a ser el primero nuevamente porque la func existearchivo lo mueve de lugar
-      auxArchivos = s->aprimero;
+      auxArchivos = s->dirActual->aprimero;
       //Recorro la estructura para hayar el arch a escribir
       while ((auxArchivos != NULL) && (encontre == false)) {
         if ((strcmp(auxArchivos->nombre, nom) == 0) && (strcmp(auxArchivos->extension, ext) == 0)){
@@ -578,7 +578,7 @@ TipoRet BF(Sistema &s, char nombreArchivo[], int k/*, char error[]*/) {
 
           auxArchivos->tamanio = auxArchivos->tamanio - cantCaracteres;
           auxArchivos->lultimo->sig = NULL; //apuntamos a sig null la lienea que no borro
-          s->aprimero = dirPrim; //reestablecemos la estructura original
+          s->dirActual->aprimero = dirPrim; //reestablecemos la estructura original
 
           strcpy (mensaje, "Se borraron las k lineas");
           Respuesta = OK;
@@ -607,8 +607,8 @@ TipoRet CAT(Sistema &s, char nombreArchivo1[], char nombreArchivo2[]/*, char err
   //para poder decirle a la funcion ic qe en este archivo van a ir todas las lineas del arch 2
   strcpy(auxArchNombreCompleto_A,nombreArchivo1);
 
-  Archivo Archivos1 = s->aprimero;
-  Archivo Archivos2 = s->aprimero;
+  Archivo Archivos1 = s->dirActual->aprimero;
+  Archivo Archivos2 = s->dirActual->aprimero;
 
   //partimos el nombreArchivo1 en nom y ext
   strcpy(nomArch1,strtok(nombreArchivo1, "."));
@@ -693,9 +693,9 @@ TipoRet IC ( Sistema &s, char nombreArchivo[], char texto[]/*, char error[] */) 
   } else {
 
     //Primero nos hacemos una copia del primero para restablecer el sistema al final del proceso
-    Archivo dirPrim = s->aprimero;
+    Archivo dirPrim = s->dirActual->aprimero;
     //Ya que no es vacia copiamos el primer archivo de la lista para manejarla desde ahi
-    Archivo auxArchivos = s->aprimero;
+    Archivo auxArchivos = s->dirActual->aprimero;
 
     //Comprobamos que el texto a ingresar no supere los 50 caracteres
     if ((strlen(texto) > TEXTO_LARGO)) {
@@ -712,7 +712,7 @@ TipoRet IC ( Sistema &s, char nombreArchivo[], char texto[]/*, char error[] */) 
 
       // Ya que el archivo existe en el sistema, hay que pararse sobre el para poder escribir
       // Fuerzo aux a ser el primero nuevamente porque la func existearchivo lo mueve de lugar
-      auxArchivos = s->aprimero;
+      auxArchivos = s->dirActual->aprimero;
       //Recorro la estructura para hayar el arch a escribir
       while ((auxArchivos != NULL) && (encontre == false)) {
         if ((strcmp(auxArchivos->nombre, nom) == 0) && (strcmp(auxArchivos->extension, ext) == 0)){
@@ -760,7 +760,7 @@ TipoRet IC ( Sistema &s, char nombreArchivo[], char texto[]/*, char error[] */) 
         }
     }
     //Restablecemos la estructura sistema ya que se corrio para pararse sobre el arch
-    s->aprimero = dirPrim;
+    s->dirActual->aprimero = dirPrim;
 }
 cout << mensaje << endl;
 return Respuesta;
@@ -790,9 +790,9 @@ TipoRet Respuesta;
     Respuesta = ERROR;
   } else {
     //Primero nos hacemos una copia del primero para restablecer el sistema al final del proceso
-    Archivo dirPrim = s->aprimero;
+    Archivo dirPrim = s->dirActual->aprimero;
     //Ya que no es vacia copiamos el primer archivo de la lista para manejarla desde ahi
-    Archivo auxArchivos = s->aprimero;
+    Archivo auxArchivos = s->dirActual->aprimero;
 
     if (!existeArchivo(auxArchivos, nom, ext)) {
       //Esta funcion comprueba sobre toda la lista de arch si hay coincidencia de nom y ext
@@ -846,7 +846,7 @@ TipoRet Respuesta;
 
           auxArchivos->tamanio = auxArchivos->tamanio - cantCaracteres;
           auxArchivos->lprimero->ant = NULL; //apuntamos a sig null la lienea que no borro
-          s->aprimero = dirPrim; //reestablecemos la estructura original
+          s->dirActual->aprimero = dirPrim; //reestablecemos la estructura original
 
           strcpy (mensaje, "Se borraron las k lineas");
           Respuesta = OK;
@@ -889,7 +889,7 @@ TipoRet UNDELETE(Sistema &s/*, char * &error*/){
 //PRE: la lista sistema debe estar creada;
 //POST: Devuele true si la lista es vacia, false en otro caso.
 bool isEmptySistema(Sistema s){
-    return (s->aprimero == NULL);
+    return (s->dirActual->aprimero == NULL);
 }
 
 

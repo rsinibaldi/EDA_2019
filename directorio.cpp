@@ -158,6 +158,11 @@ void Imprimir_directorios(Directorio d, char parametro[]){
         Imprimir_directorios(siguienteDir(d),parametro);
     }
   }else{
+    if (!isEmptyDirectorio(d)){
+        Imprimir_archivos(aux_archivo);
+        cout << d->nombre << "     " << "Directorio" << endl; //Imprimo el renglon
+        Imprimir_directorios(siguienteDir(d),parametro);
+    }
     //Imprimo directorios y sub Directorios
   }
 }
