@@ -115,7 +115,7 @@ int main(){
  		}else{
  			strcpy(comando,entradaCompleta);
 
- 			cout << comando <<endl;
+ 		//	cout << comando <<endl;
 
  		}
 
@@ -191,9 +191,7 @@ int main(){
 
 
         }else if(strcmp(comando,"MKDIR") == 0){
-					cout << "A" <<endl;
-
-          respuesta = MKDIR(s, entradaSinComando);
+					respuesta = MKDIR(s, entradaSinComando);
 
 
 

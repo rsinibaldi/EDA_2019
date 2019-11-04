@@ -6,5 +6,7 @@
 
 TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/);
 
+TipoRet CD (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/);
+
 
 #endif

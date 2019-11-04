@@ -54,26 +54,18 @@ using namespace std;
    dirActual   = s->dirActual;
    aux_archivo = dirActual->aprimero;
 
-   cout << "a" <<endl;
-
    if ((isEmptyDirectorio(dirActual->izq))&& (isEmptyArchivo(aux_archivo))){
-     cout << "b" <<endl;
      strcpy (mensaje, "No hay nada en el sistema");
      Respuesta = ERROR;
    }else{
-     cout << "c" <<endl;
      //hay cosas
      if (isEmptyDirectorio(s->dirActual->padre)){
-       cout << "d" <<endl;
        // Hay que ir recorriendo el sistema hasta NULL
        if(!isEmptyArchivo(aux_archivo)){
-         cout << "e" <<endl;
          Imprimir_archivos(aux_archivo);
        }
        if(!isEmptyDirectorio(dirActual)){
-         cout << "f" <<endl;
          Imprimir_directorios(dirActual, parametro);
-         cout << "g" <<endl;
        }
        strcpy (mensaje, "--------------------");
        Respuesta = OK;

@@ -36,9 +36,6 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
 
   Directorio DirCol;
 
-cout << "B" <<endl;
-
-
   //comprobamos que cumpla con las condiciones para ser ingresado
   if(strlen(nom) > (NOMBRE_MAX)){
     strcpy (mensaje, "El largo del Directorio excede los caracteres permitidos");
@@ -48,7 +45,6 @@ cout << "B" <<endl;
     Respuesta = ERROR;
   } else {
 
-cout << "C" <<endl;
    //Cumple los requisitos minimos, copiamos al dir nuevo :
    strcpy(nuevo->nombre,nom);
    nuevo->tamanio          = 0;
@@ -61,57 +57,42 @@ cout << "C" <<endl;
 
    //---------------------------------------------------------------
 
-cout << "D" <<endl;
    if (isEmptyDirectorio(s->dirActual->padre)) {
-     cout << "E" <<endl;
      //estoy en el nivel de la raiz
      //consulto si hay algun otro dir
      DirCol = s->dirActual->izq;
 
-      cout << "T" <<endl;
-      if (!isEmptyDirectorio(DirCol)){
-        cout << DirCol->nombre <<endl;
-      }
-
-      cout << nom <<endl;
-
      if (existeDir(DirCol, nom)){
-       cout << "F" <<endl;
        //el dir existe y por lo tanto no podemos crearlo
        strcpy (mensaje, "Lo lamento, el dir ya existe");
        Respuesta = ERROR;
      } else {
 
-       cout << "G" <<endl;
        //el dir no existe y hay que insertarlo ordenadamente
        //reseteamos el dircol
        DirCol = s->dirActual->izq;
-       cout << "H" <<endl;
-
 
        while((DirCol != NULL) && (encontre == false)){
-         cout << "I" <<endl;
          //comparamos en que lugar colocar
          //Armo el nombre completo del DIR para comparar el criterio de ordenamiento
          strcpy(nomDirAct,DirCol->nombre);
          // Compara, si es mayor va despues
          if(strcmp(nom,nomDirAct) > 0){
            encontre = true;
-           cout << "J" <<endl;
          }else{
            DirCol = siguienteDir(DirCol);
-           cout << "K" <<endl;
          }
        }
 
-       if(!encontre) {
-
-         //DirCol = nuevo;
+       if((!encontre) && (!isEmptyDirectorio(s->dirActual->izq))) {
+         //Inserto al comienzo pero ya existen directorio, antonces arreglo en enganche
+         nuevo->izq = s->dirActual->izq;
          s->dirActual->izq = nuevo;
-         cout << "L" <<endl;
-
+       }else if((!encontre) && (isEmptyDirectorio(s->dirActual->izq))){
+         //Inserto al comienzo cuando no existen directorios en el arbol
+         s->dirActual->izq = nuevo;
        } else {
-         cout << "M" <<endl;
+         //inserto al final o al medio.
          nuevo->izq = DirCol->izq;
          DirCol->izq = nuevo;
 
@@ -155,9 +136,11 @@ cout << "D" <<endl;
            nuevo->izq = DirCol->izq;
            DirCol->izq = nuevo;
            s->dirActual->der = DirCol;
+
          }
          strcpy (mensaje, "Se ha creado el archivo.");
          Respuesta = OK;
+
        }
 
    }
