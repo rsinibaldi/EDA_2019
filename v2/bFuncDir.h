@@ -71,7 +71,7 @@ void postOrden(Directorio d);
 
 bool esRutaAbsoluta(char nombreDirectorio[]);
 
-char NomDirRutaAbsoluta(char nombreDirectorio[]);
+void NomDirRutaAbsoluta(char nombreDirectorio[], char retorno[]);
 
 
 #endif

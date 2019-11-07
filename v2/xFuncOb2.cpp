@@ -28,21 +28,22 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
   char nomDirAct[NOMBRE_MAX];
   char raiz[NOMBRE_MAX]={'\\'};
   char nom[NOMBRE_MAX];
+  char nomAux[NOMBRE_MAX];
 
   //Creamos nueva estructura para directorio
   Directorio nuevo = new struct str_directorio;
   Directorio DirCol;
-
+cout << "antes de llamar esRutaAbsoluta: "<< nombreDirectorio << endl;
   //Si es ruta absoluta llamamos a funcion que recorra y
-  //ubique el directorio actual con la rutadonde tenemos que crear la carpeta
-  //En caso contrario asinamos nombreDirectorioal directorio actual.
+  //ubique el directorio actual con la ruta donde tenemos que crear la carpeta
+  //En caso contrario asignamos nombreDirectorio al directorio actual.
   if(esRutaAbsoluta(nombreDirectorio)){
-    nom = NomDirRutaAbsoluta(nombreDirectorio);
+    NomDirRutaAbsoluta(nombreDirectorio,nomAux);
   }else{
     //asignamos nombre a variable local
     strcpy(nom,nombreDirectorio);
   }
-
+/*
   //comprobamos que cumpla con las condiciones para ser ingresado
   if(strlen(nom) > (NOMBRE_MAX)){
     strcpy (mensaje, "El largo del Directorio excede los caracteres permitidos");
@@ -157,4 +158,5 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
 
   cout << mensaje << endl;
   return Respuesta;
+  */
   }

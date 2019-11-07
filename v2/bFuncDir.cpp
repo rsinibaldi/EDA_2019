@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
+#include <string.h>
 
 
 //#include "aStruct.h"
@@ -69,7 +70,10 @@ Directorio vacio(){
 bool esRutaAbsoluta(char nombreDirectorio[]){
 
   char barra[] = "/";
-  if (strspn(nombreDirectorio,barra) > 1){
+  int a;
+  a = strspn(nombreDirectorio,barra);
+  cout << "esRutaAbsoluta [strspn] : "<< a << endl;
+  if (strspn(nombreDirectorio,barra) > 0){
     return true;
   }else{
     return false;
@@ -77,12 +81,22 @@ bool esRutaAbsoluta(char nombreDirectorio[]){
 
 }
 
-char NomDirRutaAbsoluta(char nombreDirectorio[]){
-  char * pos, posFin;
-  char Directorio[NOMBRE_MAX];
-  pos = strrchr(nombreDirectorio,'/');
-  posFin = strlen(nombreDirectorio);
-  std::string Directorio = str.substr (pos,posFin);
+void NomDirRutaAbsoluta(char nombreDirectorio[],char retorno[]){
+  // int pos, posFin;
+  // string strDirNuevo;
+
+  // // pos = strrchr(nombreDirectorio,'/');
+  // // posFin = strlen(nombreDirectorio);
+
+  //  pos = nombreDirectorio.find("/"); 
+
+  // string str(nombreDirectorio);
+  
+
+  // strDirNuevo = str.substr(pos+1);
+
+  // char Directorio[strDirNuevo.size()+1];
+  // strcpy(Directorio,strDirNuevo.c_str());
 
 
 }
