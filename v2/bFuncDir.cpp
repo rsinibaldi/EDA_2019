@@ -53,11 +53,40 @@ void Imprimir_directorios(Directorio d, char parametro[]){
 }
 
 
+//pre: a no es vacio
+//post: retorna la direccion del subarbol derecho de a.
+Directorio subDir(Directorio d){
+    return d->der;
+}
+
 //pre: n/a
 //post: retorna el arbol vacio.
 Directorio vacio(){
     return NULL;
 }
+
+
+bool esRutaAbsoluta(char nombreDirectorio[]){
+
+  char barra[] = "/";
+  if (strspn(nombreDirectorio,barra) > 1){
+    return true;
+  }else{
+    return false;
+  }
+
+}
+
+char NomDirRutaAbsoluta(char nombreDirectorio[]){
+  char * pos, posFin;
+  char Directorio[NOMBRE_MAX];
+  pos = strrchr(nombreDirectorio,'/');
+  posFin = strlen(nombreDirectorio);
+  std::string Directorio = str.substr (pos,posFin);
+
+
+}
+
 
 //post: retorna true si a es vacio, false en otro caso.
 
@@ -70,11 +99,6 @@ Directorio vacio(){
 
 
 
-//pre: a no es vacio
-//post: retorna la direccion del subarbol derecho de a.
-Directorio subDir(Directorio d){
-    return d->der;
-}
 
 //pre: n/a
 //post:retorna la direccion del nodo con valor x;

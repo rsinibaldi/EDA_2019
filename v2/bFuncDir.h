@@ -69,5 +69,9 @@ void Imprimir_directorios(Directorio d, char parametro[]);
 //      cuando recorremos el arbol en postorden.
 void postOrden(Directorio d);
 
+bool esRutaAbsoluta(char nombreDirectorio[]);
+
+char NomDirRutaAbsoluta(char nombreDirectorio[]);
+
 
 #endif

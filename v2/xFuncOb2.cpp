@@ -24,17 +24,24 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
   TipoRet Respuesta;
   char mensaje[TEXTO_LARGO]; // para mostrar el error en la pantalla
 
-  Directorio nuevo = new struct str_directorio;
-  char nom[NOMBRE_MAX];
-  strcpy(nom,nombreDirectorio);
-
   bool encontre = false;
   char nomDirAct[NOMBRE_MAX];
   char raiz[NOMBRE_MAX]={'\\'};
-  // strcpy(raiz, '\\');
+  char nom[NOMBRE_MAX];
 
-
+  //Creamos nueva estructura para directorio
+  Directorio nuevo = new struct str_directorio;
   Directorio DirCol;
+
+  //Si es ruta absoluta llamamos a funcion que recorra y
+  //ubique el directorio actual con la rutadonde tenemos que crear la carpeta
+  //En caso contrario asinamos nombreDirectorioal directorio actual.
+  if(esRutaAbsoluta(nombreDirectorio)){
+    nom = NomDirRutaAbsoluta(nombreDirectorio);
+  }else{
+    //asignamos nombre a variable local
+    strcpy(nom,nombreDirectorio);
+  }
 
   //comprobamos que cumpla con las condiciones para ser ingresado
   if(strlen(nom) > (NOMBRE_MAX)){
