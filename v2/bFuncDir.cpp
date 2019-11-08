@@ -102,6 +102,75 @@ void NomDirRutaAbsoluta(char nombreDirectorio[],char retorno[]){
 }
 
 
+
+//pre: a no es vacio
+//post: borra el valor x del arbol a.
+void borrarDir(Directorio &d, char NombreDir[]){
+
+  /***************************************************************************
+
+
+
+
+      FALTA VER EL CASO QUE BORRE TODOS LOS SUB DIRECTORIOS.
+      ACTUALMENTE QUEDAN COLGADOS EN MEMORIA
+
+
+
+  ********************************************************************/
+
+  if (!isEmptyDirectorio(d)){
+      //Si mi dir no es
+      if (strcmp(NombreDir,d->nombre) != 0){
+
+        //Me fijo si el siguiente al mio es el que tengo q borrar
+        if (strcmp(NombreDir,d->izq->nombre) == 0){
+          // lo encontre, guardo aux con el dir que tengo q eliminar
+          Directorio aux = d->izq;
+          
+          //llamo a borrar los archivos          
+          borrarArchivos(aux->aprimero);
+
+          // si el siguiente de mi aux no es null apunto en dir en el que estoy al siguiente que quiero.
+          //osea que asalteo el que voy a borrar
+          if (!isEmptyDirectorio(aux->izq)){
+            d->izq = aux->izq;
+          }else{
+            //ya que el directorio soguiente al que borro no existe apunto el actual a null. 
+            //osea, estoy borrando el ultimo dir
+            d->izq = NULL;
+          }
+          delete aux;
+
+        }else{
+          //Si el siguiente al que estoy verificando no es el dir, llamo a la fubncion recursiva
+          borrarDir(d->izq, NombreDir);
+        }
+        
+      }else{ // lo encontre y es el primer nodo, osea que apunto el padre al siquiente de la lista y elimino el aux
+             // que es el dir actual        
+          Directorio aux = d;
+
+          //llamo a borrar los archivos          
+          borrarArchivos(aux->aprimero);
+
+          d->padre = d->izq;
+          delete aux;
+      }
+  }
+}
+
+void borrarArchivos(Archivo &a){
+  //En teoria llego al final de los archivos y ahi los comienza eliminar, hasta llegar al primero
+  if (!isEmptyArchivo(ArchivosCol)){
+    borrarArchivos(TailArchivo(a));
+    delete a;
+  }
+
+}
+
+
+
 //post: retorna true si a es vacio, false en otro caso.
 
 
@@ -167,32 +236,8 @@ void NomDirRutaAbsoluta(char nombreDirectorio[],char retorno[]){
 //         insertar(a->der, x);
 //     } // el caso que quieren insertar un x que ya existe, por lo que no hago nada.
 // }
-//
-// //pre: a no es vacio
-// //post: borra el valor x del arbol a.
-// void borrar(Directorio &d, char NombreDir[]){
-//     if (!esVacio(a)){
-//         if (x < valor(a)){
-//             borrar(a->izq, x);
-//         }else if (valor(a) < x){
-//             borrar(a->der, x);
-//         }else{ // lo encontre
-//             Directorio dux = a;
-//             if (esVacio(hijoIzq(a))){
-//                 a = a->der;
-//                 delete aux;
-//             }else if (esVacio(hijoDer(a))){
-//                 a = a->izq;
-//                 delete aux;
-//             }else{
-//                 aux =buscarMinimo(a->der);
-//                 a->valor = aux->valor;
-//                 borrar(a->der, aux->valor);
-//             }
-//         }
-//     }
-// }
-//
+
+
 // //pre: n/a
 // //post: lista los valores de los nodos de a,
 // //      cuando recorremos el arbol en inorden.

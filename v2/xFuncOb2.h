@@ -3,10 +3,10 @@
 
 #include "aStruct.h"
 
-
 TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/);
 
 TipoRet CD (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/);
 
+TipoRet RMDIR (Sistema &s, char nombreDirectorio[]);
 
 #endif

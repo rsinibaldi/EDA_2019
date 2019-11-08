@@ -96,7 +96,7 @@ void init(Linea &l, Archivo &a, Directorio &d, Papelera &p, Sistema &s){
   //PRE: la lista sistema debe estar creada;
   //POST: Devuele true si la lista es vacia, false en otro caso.
   bool isEmptySistema(Sistema s){
-      return (s->aprimero == NULL);
+      return (s->dirActual->aprimero == NULL);
   }
 
 
