@@ -92,31 +92,11 @@ int main(){
  		//si la posición del espacio es mayor a 0 quiere decir que hay algo mas.
  		//de lo contrario copio solo en contenido de la variable que quiere decir que es un unico comando.
  		if(posEspacio > 0){
-
-/*
-
-	    	strcpy(comando,strtok(entradaCompleta, " "));
-
-	    	cout << entradaCompleta <<endl;
-
-			strcpy(entradaSinComando,strtok(NULL, " "));
-
-            cout << entradaSinComando <<endl;
-
-            strcpy(texto,strtok(NULL, "\n"));
-
-            cout << texto <<endl;
-
-*/
-
       strcpy(comando,strtok(entradaCompleta, " "));
 			strcpy(entradaSinComando,strtok(NULL, "\n"));
 
  		}else{
  			strcpy(comando,entradaCompleta);
-
- 		//	cout << comando <<endl;
-
  		}
 
 
