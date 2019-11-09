@@ -52,7 +52,7 @@ void Imprimir_archivos(Archivo arch){
 //pos: busca en la lista el archivo y lo devuelve.
 Archivo buscarArchivo(Sistema s, char nom[], char ext[]){
     bool encontre = false;
-    Archivo auxArchivos = s->aprimero;
+    Archivo auxArchivos = s->dirActual->aprimero;
     Archivo res;
 
 

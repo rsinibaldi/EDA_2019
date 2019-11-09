@@ -158,3 +158,63 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
   cout << mensaje << endl;
   return Respuesta;
   }
+
+
+TipoRet RMDIR (Sistema &s, char nombreDirectorio[]){
+
+
+  TipoRet Respuesta;
+  char mensaje[TEXTO_LARGO]; // para mostrar el error en la pantalla
+
+  bool encontre = false;
+  char nomDirAct[NOMBRE_MAX];
+  char raiz[NOMBRE_MAX]={'\\'};
+  char nom[NOMBRE_MAX];
+  char nomAux[NOMBRE_MAX];
+  Directorio DirCol;
+
+  DirCol = s->dirActual;
+
+  strcpy(nom,nombreDirectorio);
+
+  if (isEmptyDirectorio(s->dirActual->padre)) {
+    //estoy en el nivel de la raiz
+    //consulto si hay algun otro dir
+
+    if (!existeDir(DirCol, nom)){
+      strcpy (mensaje, "Lo lamento, el dir a eliminar no existe");
+      Respuesta = ERROR;
+
+    } else {
+
+      DirCol = s->dirActual;
+      borrarDir(DirCol,nombreDirectorio);
+
+    }
+  //ahora estoy en el arbol
+  }else{
+
+    //consulto si hay algun otro dir
+    DirCol = s->dirActual->der;
+    if (!existeDir(DirCol, nom)){
+      strcpy (mensaje, "Lo lamento, el dir a eliminar no existe");
+      Respuesta = ERROR;
+
+    } else {
+      //reseteamos el dircol
+      DirCol = s->dirActual->der;
+      borrarDir(DirCol,nombreDirectorio);
+      
+      
+    }
+
+
+
+
+
+
+
+
+
+
+}
