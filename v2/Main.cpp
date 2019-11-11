@@ -102,7 +102,7 @@ int main(){
 
  		//Comparamos los comandos y llamamos
  		if(strcmp(comando,"DIR")==0){
- 			respuesta = DIR2(s,entradaSinComando);
+ 			respuesta = DIR(s,entradaSinComando);
 
 
  		}else if(strcmp(comando,"CREATE") == 0){
@@ -170,9 +170,11 @@ int main(){
 
 
 
-        }else if(strcmp(comando,"MKDIR") == 0){
+				}else if(strcmp(comando,"MKDIR") == 0){
 					respuesta = MKDIR(s, entradaSinComando);
 
+				}else if(strcmp(comando,"RMDIR") == 0){
+					respuesta = RMDIR(s, entradaSinComando);
 
 
         }else if(strcmp(comando,"EXIT") == 0){

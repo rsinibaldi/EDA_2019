@@ -15,15 +15,15 @@ using namespace std;
 
 
 bool existeDir(Directorio DirCol, char nom[]){
-  cout << "1" <<endl;
+  cout << " existeDir - 1" <<endl;
   cout << nom <<endl;
     if(!isEmptyDirectorio(DirCol)){
       cout << DirCol->nombre <<endl;
         if (strcmp(DirCol->nombre, nom) == 0){
-          cout << "3" <<endl;
+          cout << "existeDir - 3" <<endl;
             return true;
         }else{
-          cout << "4" <<endl;
+          cout << "existeDir - 4" <<endl;
             return existeDir(siguienteDir(DirCol), nom);
         }
     }
@@ -88,10 +88,10 @@ void NomDirRutaAbsoluta(char nombreDirectorio[],char retorno[]){
   // // pos = strrchr(nombreDirectorio,'/');
   // // posFin = strlen(nombreDirectorio);
 
-  //  pos = nombreDirectorio.find("/"); 
+  //  pos = nombreDirectorio.find("/");
 
   // string str(nombreDirectorio);
-  
+
 
   // strDirNuevo = str.substr(pos+1);
 
@@ -106,65 +106,88 @@ void NomDirRutaAbsoluta(char nombreDirectorio[],char retorno[]){
 //pre: a no es vacio
 //post: borra el valor x del arbol a.
 void borrarDir(Directorio &d, char NombreDir[]){
-
-  /***************************************************************************
-
-
-
-
-      FALTA VER EL CASO QUE BORRE TODOS LOS SUB DIRECTORIOS.
-      ACTUALMENTE QUEDAN COLGADOS EN MEMORIA
-
-
-
-  ********************************************************************/
-
+std::cout << "borrarDir - A " << '\n';
   if (!isEmptyDirectorio(d)){
       //Si mi dir no es
       if (strcmp(NombreDir,d->nombre) != 0){
-
+        std::cout << "borrarDir - B " << '\n';
         //Me fijo si el siguiente al mio es el que tengo q borrar
         if (strcmp(NombreDir,d->izq->nombre) == 0){
+          std::cout << "borrarDir - C " << '\n';
           // lo encontre, guardo aux con el dir que tengo q eliminar
           Directorio aux = d->izq;
-          
-          //llamo a borrar los archivos          
-          borrarArchivos(aux->aprimero);
 
+          //llamo a borrar los archivos
+          Archivo archaux = aux->aprimero;
+          Directorio dirDer = aux->der;
+          borrarArchivos(aux->aprimero);
+          borrarSubDir(aux->der);
+          std::cout << "borrarDir - D " << '\n';
           // si el siguiente de mi aux no es null apunto en dir en el que estoy al siguiente que quiero.
           //osea que asalteo el que voy a borrar
           if (!isEmptyDirectorio(aux->izq)){
             d->izq = aux->izq;
+            std::cout << "borrarDir - E " << '\n';
           }else{
-            //ya que el directorio soguiente al que borro no existe apunto el actual a null. 
+            std::cout << "borrarDir - F " << '\n';
+            //ya que el directorio siguiente al que borro no existe apunto el actual a null.
             //osea, estoy borrando el ultimo dir
             d->izq = NULL;
           }
+          std::cout << "borrarDir - G " << '\n';
           delete aux;
+          aux = NULL;
+
 
         }else{
+          std::cout << "borrarDir - H " << '\n';
           //Si el siguiente al que estoy verificando no es el dir, llamo a la fubncion recursiva
           borrarDir(d->izq, NombreDir);
         }
-        
+
       }else{ // lo encontre y es el primer nodo, osea que apunto el padre al siquiente de la lista y elimino el aux
-             // que es el dir actual        
+             // que es el dir actual
           Directorio aux = d;
+          std::cout << "borrarDir - I " << '\n';
+          //llamo a borrar los archivos
+          Archivo archaux = d->aprimero;
+          Directorio dirDer = d->der;
+          borrarArchivos(archaux);
+          borrarSubDir(dirDer);
 
-          //llamo a borrar los archivos          
-          borrarArchivos(aux->aprimero);
+          if(!isEmptyDirectorio(aux->izq)){
+            std::cout << "borrarDir - J " << '\n';
+            d->padre->der = d->izq;
 
-          d->padre = d->izq;
+          }
+          std::cout << "borrarDir - K " << d->nombre << '\n';
+          std::cout << "borrarDir - L " << aux->nombre << '\n';
           delete aux;
+          std::cout << "borrarDir - M " << d->nombre << '\n';
+          std::cout << "borrarDir - N " << aux->nombre << '\n';
+          aux = NULL;
+          std::cout << "borrarDir - O " << d->nombre << '\n';
       }
   }
 }
 
 void borrarArchivos(Archivo &a){
   //En teoria llego al final de los archivos y ahi los comienza eliminar, hasta llegar al primero
-  if (!isEmptyArchivo(ArchivosCol)){
-    borrarArchivos(TailArchivo(a));
+  if (!isEmptyArchivo(a)){
+    borrarArchivos(a->sig);
     delete a;
+    a = NULL;
+  }
+
+}
+
+void borrarSubDir(Directorio &d){
+  //En teoria llego al final de los archivos y ahi los comienza eliminar, hasta llegar al primero
+  if (!isEmptyDirectorio(d)){
+    borrarSubDir(d->der);
+    borrarSubDir(d->izq);
+    delete d;
+    d = NULL;
   }
 
 }

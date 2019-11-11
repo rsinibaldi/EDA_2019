@@ -22,28 +22,9 @@ using namespace std;
 
  // FUNCIONES TIPO 1
 
- //PRE: No tiene, solo que si no hay arch no los puede mostrar
- //POST: Muestra los archivos creados en el sistema
- TipoRet DIR(Sistema &s/*, char * parametro, char &error[]*/){
-   TipoRet Respuesta;
-   char mensaje[TEXTO_LARGO];
-
-   if(isEmptySistema(s)){
-     strcpy (mensaje, "No hay archivos en el sistema");
-     Respuesta = ERROR;
-     }else{
-       // Hay que ir recorriendo el sistema hasta NULL
-       Archivo aux_archivo = s->aprimero;
-       Imprimir_archivos(aux_archivo);
-       Respuesta = OK;
-     }
-     cout << "\n " << endl;
-     return Respuesta;
- }
-
-
-
- TipoRet DIR2(Sistema &s, char parametro[]/*, char &error[]*/){
+ //PRE: No tiene, solo que si no hay arch u directorios no los puede mostrar
+ //POST: Muestra los archivos y directorios creados en el sistema
+ TipoRet DIR(Sistema &s, char parametro[]/*, char &error[]*/){
    TipoRet Respuesta;
    char mensaje[TEXTO_LARGO];
    Directorio dirActual;
@@ -54,45 +35,31 @@ using namespace std;
    dirActual   = s->dirActual;
    aux_archivo = dirActual->aprimero;
 
-   if ((isEmptyDirectorio(dirActual->izq))&& (isEmptyArchivo(aux_archivo))){
+   if ((isEmptyDirectorio(dirActual->der))&& (isEmptyArchivo(aux_archivo))){
      strcpy (mensaje, "No hay nada en el sistema");
      Respuesta = ERROR;
    }else{
      //hay cosas
-     if (isEmptyDirectorio(s->dirActual->padre)){
-       // Hay que ir recorriendo el sistema hasta NULL
-       if(!isEmptyArchivo(aux_archivo)){
-         Imprimir_archivos(aux_archivo);
-       }
-       if(!isEmptyDirectorio(dirActual)){
-         Imprimir_directorios(dirActual, parametro);
-       }
-       strcpy (mensaje, "--------------------");
-       Respuesta = OK;
 
+     //si no estoy en raiz, si estoy en un sub nivel
+     auxSubDir   = subDir(dirActual);
 
-     }else {
-
-       //si no estoy en raiz, si estoy en un sub nivel
-       auxSubDir   = subDir(dirActual);
-
-       if((isEmptyDirectorio(auxSubDir)) ){
-         strcpy (mensaje, "El directorio se encuentra vacío");
-         Respuesta = ERROR;
-       }else{
-           // Hay que ir recorriendo el sistema hasta NULL
-           if(!isEmptyArchivo(aux_archivo)){
-             Imprimir_archivos(aux_archivo);
-           }
-           if(!isEmptyDirectorio(auxSubDir)){
-             Imprimir_directorios(auxSubDir, parametro);
-           }
-           strcpy (mensaje, "--------------------");
-           Respuesta = OK;
+     if((isEmptyDirectorio(auxSubDir)) ){
+       strcpy (mensaje, "El directorio se encuentra vacío");
+       Respuesta = ERROR;
+     }else{
+         // Hay que ir recorriendo el sistema hasta NULL
+         if(!isEmptyArchivo(aux_archivo)){
+           Imprimir_archivos(aux_archivo);
          }
+         if(!isEmptyDirectorio(auxSubDir)){
+           Imprimir_directorios(auxSubDir, parametro);
+         }
+         strcpy (mensaje, "--------------------");
+         Respuesta = OK;
        }
-
      }
+
      cout << mensaje << endl;
      return Respuesta;
     }
@@ -115,8 +82,8 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
     bool encontre = false;
 
     //Nos quedamos con el directorio actual
-    dirActual   = s->directorio;
 
+    dirActual   = s->dirActual;
     //Guardamos en nombre antes de partirlo (para poder guardar ordenado)
     char nomCompleto[ARCH_NOM_MAX];
     strcpy(nomCompleto,nombreArchivo);
@@ -433,7 +400,7 @@ TipoRet DELETE(Sistema& s, char nombreArchivo[]/*, char& error[]*/) {
     strcpy(nom,strtok(nombreArchivo, "."));
     strcpy(ext,strtok(NULL, "\n"));
 
-    
+
     if (isEmptySistema(s)){
          strcpy (mensaje, "No hay archivos en el sistema");
          Respuesta = ERROR;
@@ -881,4 +848,3 @@ TipoRet UNDELETE(Sistema &s/*, char * &error*/){
 
 }
 //----------------------------------------
-

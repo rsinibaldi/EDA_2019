@@ -3,6 +3,7 @@
 #define BFUNCDIR_H
 
 #include "aStruct.h"
+#include "cFuncArch.h"
 
 
 
@@ -50,10 +51,6 @@ Directorio buscarMaximo(Directorio d);
 //      el arbol es de busqueda.
 void insertar(Directorio &d, char NombreDir[], int cota);
 
-//pre: a no es vacio
-//post: borra el directorio con nombre NombreDir[] del arbol a.
-void borrar(Directorio &d, char NombreDir[]);
-
 //pre: n/a
 //post: lista los valores de los nodos de a,
 //      cuando recorremos el arbol en inorden.
@@ -72,6 +69,18 @@ void postOrden(Directorio d);
 bool esRutaAbsoluta(char nombreDirectorio[]);
 
 void NomDirRutaAbsoluta(char nombreDirectorio[], char retorno[]);
+
+//pre: a no es vacio
+//post: borra el directorio con nombre NombreDir[] del arbol d.
+void borrarDir(Directorio &d, char NombreDir[]);
+
+//pre: a no es vacio
+//post: borra todos los archivos de cada carpeta del arbol d.
+void borrarArchivos(Archivo &a);
+
+//pre: a no es vacio
+//post: borra los Sub-directorio  del arbol d.
+void borrarSubDir(Directorio &d);
 
 
 #endif

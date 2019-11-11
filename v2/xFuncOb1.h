@@ -7,10 +7,9 @@
 // ------ FUNCIONES PRIMERA PARTE DEL OBLIGATORIO
 // --- FUNCIONES TIPO 1
 
-//PRE: No tiene, solo que si no hay arch no los puede mostrar
-//POST: Muestra los archivos creados en el sistema
-TipoRet DIR(Sistema &s/*, char parametro[], char &error*/);
-TipoRet DIR2(Sistema &s, char parametro[]/*, char &error*/);
+//PRE: No tiene, solo que si no hay arch u directorios no los puede mostrar
+//POST: Muestra los archivos y directorios creados en el sistema
+TipoRet DIR(Sistema &s, char parametro[]/*, char &error*/);
 
 //PRE: No Tiene
 //POST: Crea un archivo nuevo en el sistema (Si cumple con las comprobaciones)
