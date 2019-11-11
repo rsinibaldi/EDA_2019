@@ -136,7 +136,6 @@ std::cout << "borrarDir - A " << '\n';
           }
           std::cout << "borrarDir - G " << '\n';
           delete aux;
-          aux = NULL;
 
 
         }else{
@@ -155,7 +154,7 @@ std::cout << "borrarDir - A " << '\n';
           borrarArchivos(archaux);
           borrarSubDir(dirDer);
 
-          if(!isEmptyDirectorio(aux->izq)){
+          if(!isEmptyDirectorio(d->izq)){
             std::cout << "borrarDir - J " << '\n';
             d->padre->der = d->izq;
 
@@ -165,7 +164,6 @@ std::cout << "borrarDir - A " << '\n';
           delete aux;
           std::cout << "borrarDir - M " << d->nombre << '\n';
           std::cout << "borrarDir - N " << aux->nombre << '\n';
-          aux = NULL;
           std::cout << "borrarDir - O " << d->nombre << '\n';
       }
   }
