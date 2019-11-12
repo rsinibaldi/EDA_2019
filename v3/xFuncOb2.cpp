@@ -83,7 +83,7 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
      }
 
      DirCol = DirSiguiente;
-     std::cout << "quedo DirCol con: " << DirCole->nombre << '\n';
+     std::cout << "quedo DirCol con: " << DirCol->nombre << '\n';
      std::cout << "encontre?  " << encontre << '\n';
      if((!encontre) && (!isEmptyDirectorio(s->dirActual->der))) {
        std::cout << "[MKDIR] - A" << '\n';
@@ -155,3 +155,73 @@ TipoRet RMDIR (Sistema &s, char nombreDirectorio[]){
   }
 
 }
+
+
+
+/*************************************************************************************************************************
+
+
+
+*************************************************************************************************************************/
+
+TipoRet CD (Sistema &s, char nombreDirS[]){
+
+  TipoRet Respuesta;
+  Directorio DirCol;
+  Directorio dirActual;
+  char mensaje[100];
+
+  // aca cargarmos el nom en algo manejable
+  char nomruta[200];
+  strcpy (nomruta, nombreDirS);
+
+  // Se le agrega la barra para poder usar la func buscodir
+  agregarBarraFinal(nomruta);
+  cout << nomruta << endl;
+
+  //asumo ruta absoluta
+  DirCol =s->directorio;
+
+  if(buscoDir(DirCol, nomruta)) {
+    strcpy(mensaje, "OK: La busqueda se ejecuto satisfactoriamente, estamos parados sobre el dir deseado");
+    Respuesta = OK;
+  } else {
+    strcpy(mensaje, "Error: La ruta es invalida");
+    Respuesta = ERROR;
+  }
+
+  cout << mensaje << endl;
+  return Respuesta;
+
+}
+
+/*************************************************************************************************************************
+
+
+
+*************************************************************************************************************************/
+
+TipoRet PWD(Sistema &s, char nombreDirectorio[]){
+
+      TipoRet Respuesta = OK;
+      char nombreDir[100], mensaje[100];
+      Directorio DirCol;
+
+      //Coloco mi puntero DirActual o lo identifico desde el sistema para empezara a leer los padres
+      DirCol = s->dirActual;
+      strcpy(nombreDir , nombreDirectorio);
+
+      if (isEmptyDirectorio(s->directorio)) { // capaz izquierdo
+
+              strcpy(mensaje, "no hay directorios en el sistema");
+
+      }else{
+              cout << DirCol->nombre << "/" ;
+              imprimoPadres(DirCol);
+
+      }
+      cout << mensaje << endl;
+      return Respuesta;
+}
+
+//---------------------------------
