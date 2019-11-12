@@ -106,14 +106,11 @@ void NomDirRutaAbsoluta(char nombreDirectorio[],char retorno[]){
 //pre: a no es vacio
 //post: borra el valor x del arbol a.
 void borrarDir(Directorio &d, char NombreDir[]){
-std::cout << "borrarDir - A " << '\n';
   if (!isEmptyDirectorio(d)){
       //Si mi dir no es
       if (strcmp(NombreDir,d->nombre) != 0){
-        std::cout << "borrarDir - B " << '\n';
         //Me fijo si el siguiente al mio es el que tengo q borrar
         if (strcmp(NombreDir,d->izq->nombre) == 0){
-          std::cout << "borrarDir - C " << '\n';
           // lo encontre, guardo aux con el dir que tengo q eliminar
           Directorio aux = d->izq;
 
@@ -122,24 +119,19 @@ std::cout << "borrarDir - A " << '\n';
           Directorio dirDer = aux->der;
           borrarArchivos(aux->aprimero);
           borrarSubDir(aux->der);
-          std::cout << "borrarDir - D " << '\n';
           // si el siguiente de mi aux no es null apunto en dir en el que estoy al siguiente que quiero.
           //osea que asalteo el que voy a borrar
           if (!isEmptyDirectorio(aux->izq)){
             d->izq = aux->izq;
-            std::cout << "borrarDir - E " << '\n';
           }else{
-            std::cout << "borrarDir - F " << '\n';
             //ya que el directorio siguiente al que borro no existe apunto el actual a null.
             //osea, estoy borrando el ultimo dir
             d->izq = NULL;
           }
-          std::cout << "borrarDir - G " << '\n';
           delete aux;
 
 
         }else{
-          std::cout << "borrarDir - H " << '\n';
           //Si el siguiente al que estoy verificando no es el dir, llamo a la fubncion recursiva
           borrarDir(d->izq, NombreDir);
         }
@@ -147,7 +139,6 @@ std::cout << "borrarDir - A " << '\n';
       }else{ // lo encontre y es el primer nodo, osea que apunto el padre al siquiente de la lista y elimino el aux
              // que es el dir actual
           Directorio aux = d;
-          std::cout << "borrarDir - I " << '\n';
           //llamo a borrar los archivos
           Archivo archaux = d->aprimero;
           Directorio dirDer = d->der;
@@ -155,16 +146,12 @@ std::cout << "borrarDir - A " << '\n';
           borrarSubDir(dirDer);
 
           if(!isEmptyDirectorio(d->izq)){
-            std::cout << "borrarDir - J " << '\n';
             d->padre->der = d->izq;
 
+          }else{
+            d->padre->der = NULL;
           }
-          std::cout << "borrarDir - K " << d->nombre << '\n';
-          std::cout << "borrarDir - L " << aux->nombre << '\n';
           delete aux;
-          std::cout << "borrarDir - M " << d->nombre << '\n';
-          std::cout << "borrarDir - N " << aux->nombre << '\n';
-          std::cout << "borrarDir - O " << d->nombre << '\n';
       }
   }
 }

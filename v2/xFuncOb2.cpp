@@ -30,7 +30,7 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
 
   //Creamos nueva estructura para directorio
   Directorio nuevo = new struct str_directorio;
-  Directorio DirCol;
+  Directorio DirCol, DirSiguiente;
 
   strcpy(nom,nombreDirectorio);
 
@@ -68,34 +68,41 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
      //reseteamos el dircol
      DirCol = s->dirActual->der;
 
-     while((DirCol != NULL) && (encontre == false)){
+     while((DirCol != NULL)/* && (encontre == false)*/){
        //comparamos en que lugar colocar
        //Armo el nombre completo del DIR para comparar el criterio de ordenamiento
        strcpy(nomDirAct,DirCol->nombre);
        // Compara, si es mayor va despues
        if(strcmp(nom,nomDirAct) > 0){
+         DirSiguiente = DirCol;
          encontre = true;
-       }else{
-         DirCol = siguienteDir(DirCol);
+       // }else{
+
        }
+       DirCol = siguienteDir(DirCol);
      }
 
+     DirCol = DirSiguiente;
+     std::cout << "quedo DirCol con: " << DirCol->nombre << '\n';
+     std::cout << "encontre?  " << encontre << '\n';
      if((!encontre) && (!isEmptyDirectorio(s->dirActual->der))) {
+       std::cout << "[MKDIR] - A" << '\n';
        //Inserto al comienzo pero ya existen directorio, antonces arreglo en enganche
        nuevo->izq = s->dirActual->der;
        s->dirActual->der = nuevo;
        insertOk = true;
 
      }else if((!encontre) && (isEmptyDirectorio(s->dirActual->der))) {
+       std::cout << "[MKDIR] - B" << '\n';
        //Inserto al comienzo cuando no existen directorios en el arbol
        s->dirActual->der = nuevo;
        insertOk = true;
 
      } else {
+       std::cout << "[MKDIR] - C" << '\n';
        //inserto al final o al medio
        nuevo->izq = DirCol->izq;
        DirCol->izq = nuevo;
-       s->dirActual->der = DirCol;
        insertOk = true;
 
      }
@@ -134,16 +141,13 @@ TipoRet RMDIR (Sistema &s, char nombreDirectorio[]){
   Directorio DirCol;
 
   strcpy(nom,nombreDirectorio);
-  std::cout << "RMDIR - A " << '\n';
   //consulto si hay algun otro dir
   DirCol = s->dirActual->der;
   if (!existeDir(DirCol, nom)){
-    std::cout << "RMDIR - B " << '\n';
     strcpy (mensaje, "Lo lamento, el dir a eliminar no existe");
     Respuesta = ERROR;
 
   } else {
-    std::cout << "RMDIR - C " << '\n';
     //reseteamos el dircol
     DirCol = s->dirActual->der;
     borrarDir(DirCol,nombreDirectorio);
