@@ -83,23 +83,20 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
      }
 
      DirCol = DirSiguiente;
-     std::cout << "quedo DirCol con: " << DirCole->nombre << '\n';
-     std::cout << "encontre?  " << encontre << '\n';
+     
      if((!encontre) && (!isEmptyDirectorio(s->dirActual->der))) {
-       std::cout << "[MKDIR] - A" << '\n';
+
        //Inserto al comienzo pero ya existen directorio, antonces arreglo en enganche
        nuevo->izq = s->dirActual->der;
        s->dirActual->der = nuevo;
        insertOk = true;
 
      }else if((!encontre) && (isEmptyDirectorio(s->dirActual->der))) {
-       std::cout << "[MKDIR] - B" << '\n';
        //Inserto al comienzo cuando no existen directorios en el arbol
        s->dirActual->der = nuevo;
        insertOk = true;
 
      } else {
-       std::cout << "[MKDIR] - C" << '\n';
        //inserto al final o al medio
        nuevo->izq = DirCol->izq;
        DirCol->izq = nuevo;

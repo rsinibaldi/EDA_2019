@@ -35,7 +35,7 @@ using namespace std;
    dirActual   = s->dirActual;
    aux_archivo = dirActual->aprimero;
 
-   if ((isEmptyDirectorio(dirActual->der))&& (isEmptyArchivo(aux_archivo))){
+   if ((isEmptyDirectorio(dirActual->der)) && (isEmptyArchivo(aux_archivo))){
      strcpy (mensaje, "No hay nada en el sistema");
      Respuesta = ERROR;
    }else{
@@ -44,10 +44,13 @@ using namespace std;
      //si no estoy en raiz, si estoy en un sub nivel
      auxSubDir   = subDir(dirActual);
 
-     if((isEmptyDirectorio(auxSubDir)) ){
-       strcpy (mensaje, "El directorio se encuentra vacío");
-       Respuesta = ERROR;
-     }else{
+
+    //  if(){
+    //
+    // }else if((isEmptyDirectorio(auxSubDir)) ){
+    //    strcpy (mensaje, "El directorio se encuentra vacío");
+    //    Respuesta = ERROR;
+    //  }else{
          // Hay que ir recorriendo el sistema hasta NULL
          if(!isEmptyArchivo(aux_archivo)){
            Imprimir_archivos(aux_archivo);
@@ -57,7 +60,7 @@ using namespace std;
          }
          strcpy (mensaje, "--------------------");
          Respuesta = OK;
-       }
+       // }
      }
 
      cout << mensaje << endl;
@@ -157,7 +160,6 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
           if(!encontre){
             ArchivosCol = dirActual->aultimo;
           }
-
           //Estudiamos donde colocar
           if((ArchivosCol->ant == NULL) && (ArchivosCol->sig == NULL) && (strcmp(nomCompleto,nombreArchivoActual) > 0)){
             //Si solo se inserto el primer archivo/directorio quiere decir que mi anterior y mi siguiente es NULL y
