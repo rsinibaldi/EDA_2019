@@ -8,131 +8,80 @@
 
 //#include "aStruct.h"
 #include "bFuncDir.h"
-
 using namespace std;
 
 
 // FUNCIONES AUX DIRECTORIO
 
-void imprimoPadres(Directorio d){
 
-      while(d->padre != NULL){
-            cout << "/" << d->nombre ;
-            return imprimoPadres(d->padre);
+bool esRuta(char nom[]){
+ char nomruta[200];
+ // aca cargarmos el nom en algo manejable
+ strcpy(nomruta, nom);
+ //contador parametros
+ //vemos si tiene mas de un parametro
+ int i=0;
+ int cont=0;
+ while (nomruta[i] != '\0') {
+   if (nomruta[i] == '/') {
+     i++;
+     cont++;
+   }
+ }
 
-      }
-      cout << "" <<endl;
+ if (cont == 1){
+   std::cout << "esRuta A " << '\n';
+   //procedimiento normal
+   return false;
+ }else if (cont == 2){
+   std::cout << "esRuta B " << '\n';
+     if (PrimerCBarra(nomruta)){
 
-}
-
-
-bool existeDir2(Sistema &s, char nom[]){
-  cout << "existe dir - 1" <<endl;
-  cout << nom <<endl;
-  char nombred[100];
-  strcpy(nombred, nom);
-  agregarBarraFinal(nombred);
-
-  Directorio DirCol = s->dirActual;
-  cout << "existe dir - 2" <<endl;
-  if(s->dirActual->padre == NULL){
-        s->dirActual = s->dirActual->der;
-  }
-
-  if(!isEmptyDirectorio(DirCol->izq)){
-      cout << DirCol->nombre <<endl;
-      if (strcmp(DirCol->nombre, nom) == 0){
-          cout << "existeDir - 3" <<endl;
-          return true;
-      }else{
-          cout << "existeDir - 4" <<endl;
-          DirCol = DirCol->izq;
-          s->dirActual = DirCol;
-          return existeDir2(s, nom);
+         std::cout << "esRuta C " << '\n';
+       return false;
+     } else {
+       std::cout << "esRuta D " << '\n';
+       return true;
      }
+ }else{
 
-  return false;
-  }
-}
-
-
-
-void agregarBarraFinal(char nom[]){
-  int i = 0;
-  // aca cargarmos el nom en algo manejable
-  char nomruta[200];
-  nomruta[0] = '\0';
-  strcpy (nomruta, nom);
-
-  //agregar barra al final de nomruta
-  while (nomruta[i] !='\0'){
-    i++;
-  }
-  nomruta[i] = '/';
-  nomruta[i+1] = '*';
-  nomruta[i+2] = '\0';
-
-  strcpy (nom, nomruta);
+     std::cout << "esRuta E " << '\n';
+   return true;
+ }
 
 }
 
-bool buscoDir(Directorio &d, char nom[]){
+void DameArchivoRuta(char nombreaux[], char nombreArch[], char ruta[]){
 
-  cout << "a" << endl;
+  char nombreRuta[200];
+  char rest[200],aux[200];
+  bool esAbsoluta;
 
-  char nombreaux[300],aux[100], resto[200];
-  nombreaux[0]= '\0';
-  aux[0]= '\0';
-  resto[0]= '\0';
+  strcpy(nombreRuta, nombreaux);
 
-  // aca cargarmos el nom en algo manejable
-  strcpy (nombreaux, nom);
+  char * pch;
+  ruta[0] = '\0';
 
-  cout << nombreaux << endl;
-
-    // pararlo
-    if ( strcmp(nombreaux, "*") != 0) {
-
-      cout << "b" << endl;
-
-      strcpy(aux, strtok(nombreaux, "/"));
-      cout << aux << endl;
-      strcpy(resto, strtok(NULL, "\0"));
-      cout << resto << endl;
-
-      if(existeDir(subDir(d),aux)) {
-        cout << "c" << endl;
-        return buscoDir(d, resto);
-      } else {
-        return false;
-      }
-
+  if(PrimerCBarra(nombreRuta)){
+    strcat(ruta,"/");
   }
 
-}
+  pch = strtok (nombreRuta,"/");
 
+  strcat(ruta,pch);
+  while(strcmp(pch,strtok(pch,"/"))!=0){
+    strcpy(aux,pch);
+    strcat(ruta,pch);
+    strcat(ruta,"/");
+    pch = strtok (NULL, "/");
+  }
 
-bool PrimerCBarra(char nombreDirS[]){
-
-      char aux[200],nombre[200];
-      aux[0] = '\0';
-
-      //copiamos para poder manejarlo y no tener problemas
-      strcpy(nombre, nombreDirS);
-      //aca nos quedamos con lo primero hasta la barra
-      strcpy(aux, strtok(nombre, "/"));
-      // consultamos si efectivamente es abs o no
-
-      return (aux[0] == '\0');
+  strcat(ruta,"*");
+  strcpy(nombreArch,pch);
 
 }
 
-
-
-
-
-
-
+//PARA COMPROBAR EXISTENCIA
 bool existeDir(Directorio DirCol, char nom[]){
     if(!isEmptyDirectorio(DirCol)){
         if (strcmp(DirCol->nombre, nom) == 0){
@@ -145,17 +94,125 @@ bool existeDir(Directorio DirCol, char nom[]){
 }
 
 
-//pre: a no es vacio
-//post: retorna la direccion del subarbol izquierdo de a.
-Directorio siguienteDir(Directorio d){
-    return d->izq;
+//PARA CD
+bool existeDir2(Sistema &s, char nom[]){
+
+  char nombred[100],nombreDirCol[100];
+  nombred[0]= '\0';
+  nombreDirCol[0]= '\0';
+
+  //paso nom de lo que voy a buscar a algo manejable
+  strcpy(nombred, nom);
+
+  //seteo el dircol en donde estamos parados
+  Directorio DirCol = s->dirActual;
+
+  if (isEmptyDirectorio(DirCol)) {
+    return false;
+
+  } else if (strcmp(DirCol->nombre, nombred) == 0){
+        return true;
+
+  }else{
+    DirCol = DirCol->izq;
+    s->dirActual = DirCol;
+    return existeDir2(s, nombred);
+
+  }
 }
 
-bool isEmptyDirectorio(Directorio d){
-    return (d == NULL);
+
+//PARA CD TAMBIEN
+bool buscoDir(Sistema &s, char nom[]){
+
+  char nombreaux[300],aux[100], resto[200];
+  nombreaux[0]= '\0';
+  aux[0]= '\0';
+  resto[0]= '\0';
+
+  // aca cargarmos el nom en algo manejable
+  strcpy (nombreaux, nom);
+
+  // Se le agrega la barra y el tope para poder frenar
+  //no puede ir aca por el llamado recursivo
+  //agregarBarraFinal(nombreaux);
+
+  //CON ESTO PARAMOS LA CARRERA
+  if(strcmp(nombreaux, "*") != 0){
+    //baja de nivel
+    s->dirActual = s->dirActual->der;
+    strcpy(aux, strtok(nombreaux, "/"));
+    strcpy(resto,  strtok(NULL, "\0"));
+
+        if(existeDir2(s, aux)) {
+          return buscoDir(s, resto);
+
+        } else {
+          return false;
+
+        }
+
+  } else {
+    return true;
+
+  }
 }
 
 
+
+
+void agregarBarraFinal(char nom[]){
+  int i = 0;
+  // aca cargarmos el nom en algo manejable
+  char nomruta[200];
+  nomruta[0] = '\0';
+  strcpy (nomruta, nom);
+  //agregar barra al final de nomruta
+  while (nomruta[i] !='\0'){
+    i++;
+  }
+  nomruta[i] = '/';
+  nomruta[i+1] = '*';
+  nomruta[i+2] = '\0';
+
+  strcpy (nom, nomruta);
+
+}
+
+
+bool PrimerCBarra(char nombreDirS[]){
+
+      char nomd[200];
+      //aux[0] = '\0';
+
+      //copiamos para poder manejarlo y no tener problemas
+      strcpy(nomd, nombreDirS);
+      //aca nos quedamos con lo primero hasta la barra
+      //strcpy(aux, strtok(nombre, "/"));
+      // consultamos si efectivamente es abs o no
+
+      if(nomd[0] == '/') {
+        return true;
+      }else{
+        return false;
+      }
+
+}
+
+
+
+// PARA PWD
+void imprimoPadres(Directorio d){
+      if(d->padre != NULL) {
+
+            imprimoPadres(d->padre);
+            cout << "/" << d->nombre ;
+      } else {
+        cout << "/" ;
+      }
+}
+
+//DIR
 void Imprimir_directorios(Directorio d, char parametro[]){
   if(parametro == NULL){
     if (!isEmptyDirectorio(d)){
@@ -168,19 +225,34 @@ void Imprimir_directorios(Directorio d, char parametro[]){
 }
 
 
-//pre: a no es vacio
-//post: retorna la direccion del subarbol derecho de a.
+
+
+
+//PARA MOVERSE
+Directorio siguienteDir(Directorio d){
+    return d->izq;
+}
 Directorio subDir(Directorio d){
     return d->der;
 }
-
-//pre: n/a
-//post: retorna el arbol vacio.
-Directorio vacio(){
-    return NULL;
+bool isEmptyDirectorio(Directorio d){
+    return (d == NULL);
 }
 
 
+
+
+
+bool ultimaVuelta(char nombreDirectorio[]){
+      char nom[100];
+      strcpy(nom, nombreDirectorio);
+      if(nom[0] == '/'){
+        return true;
+      }else{
+        return false;
+      }
+
+}
 bool esRutaAbsoluta(char nombreDirectorio[]){
 
   char barra[] = "/";
@@ -270,23 +342,10 @@ void borrarDir(Directorio &d, char NombreDir[]){
   }
 }
 
-void borrarLineas(Linea l) {
-  if (!isEmptyArchivoLineas(l)) {
-    borrarLineas(l->sig);
-    delete l;
-    l = NULL;
-  }
-}
-
 void borrarArchivos(Archivo &a){
   //En teoria llego al final de los archivos y ahi los comienza eliminar, hasta llegar al primero
   if (!isEmptyArchivo(a)){
     borrarArchivos(a->sig);
-    if (!isEmptyArchivoLineas(a->lprimero)) {
-      borrarLineas(a->lprimero);
-      a->lprimero = NULL;
-      a->lultimo  = NULL;
-    }
     delete a;
     a = NULL;
   }
@@ -303,6 +362,7 @@ void borrarSubDir(Directorio &d){
   }
 
 }
+
 
 
 

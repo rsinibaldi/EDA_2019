@@ -89,5 +89,9 @@ void borrarArchivos(Archivo &a);
 //post: borra los Sub-directorio  del arbol d.
 void borrarSubDir(Directorio &d);
 
+//pre: a no es vacio
+//post: borra las lineas del directorio d.
+void borrarLineas(Linea l)
+
 
 #endif
