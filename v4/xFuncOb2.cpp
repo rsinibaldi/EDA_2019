@@ -32,6 +32,7 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
 
   //HACER RUTA ABS
 DameArchivoRuta(nombreDirectorio,nomDir,dirBuscoDir);
+CD
 
 
 
