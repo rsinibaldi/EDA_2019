@@ -25,24 +25,33 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
   bool encontre = false;
   bool insertOk = false;
   char nomDirAct[NOMBRE_MAX];
-  char nomDir[NOMBRE_MAX];
-  char dirBuscoDir[NOMBRE_MAX];
   char raiz[NOMBRE_MAX]={'\\'};
   char nom[NOMBRE_MAX];
+  char ruta[200],dato[200];
 
   //HACER RUTA ABS
-DameArchivoRuta(nombreDirectorio,nomDir,dirBuscoDir);
-CD
 
+  if(esRuta(nombreDirectorio)){
+    CortarRuta(nombreDirectorio,ruta,dato);
+    //SE ESTA CREANDO IGUAL AUNQUE DE ERROR LA RUTA
+    if((CD(s,ruta)) == true){
+      strcpy(nom, dato);
+    } else {
+      strcpy (mensaje, "La ruta no es correcta");
+      Respuesta = ERROR;
+    }
+    //------------------------------------
 
+  } else {
+    strcpy(nom,nombreDirectorio);
 
+  }
 
 
   //Creamos nueva estructura para directorio
   Directorio nuevo = new struct str_directorio;
   Directorio DirCol, DirSiguiente;
 
-  strcpy(nom,nombreDirectorio);
 
   //comprobamos que cumpla con las condiciones para ser ingresado
   if(strlen(nom) > (NOMBRE_MAX)){
@@ -184,10 +193,8 @@ TipoRet CD (Sistema &s, char nombreDirS[]){
           strcpy(mensaje, "OK: La busqueda se ejecuto satisfactoriamente, estamos parados sobre el dir deseado");
           Respuesta = OK;
         }else{
-          std::cout << "en el else de cd 1" << '\n';
           //reseteamos porque busco dir nos dejo en cualquier lado
           s->dirActual = dirActual;
-          std::cout << "en el else de cd 2" << '\n';
           strcpy(mensaje, "Error: La ruta es invalida");
           Respuesta = ERROR;
         }

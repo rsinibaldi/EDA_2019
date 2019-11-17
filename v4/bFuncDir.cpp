@@ -14,72 +14,85 @@ using namespace std;
 // FUNCIONES AUX DIRECTORIO
 
 
-bool esRuta(char nom[]){
- char nomruta[200];
- // aca cargarmos el nom en algo manejable
- strcpy(nomruta, nom);
- //contador parametros
- //vemos si tiene mas de un parametro
- int i=0;
- int cont=0;
- while (nomruta[i] != '\0') {
-   if (nomruta[i] == '/') {
-     i++;
-     cont++;
-   }
- }
 
- if (cont == 1){
-   std::cout << "esRuta A " << '\n';
-   //procedimiento normal
-   return false;
- }else if (cont == 2){
-   std::cout << "esRuta B " << '\n';
-     if (PrimerCBarra(nomruta)){
+// cosas nuevas
 
-         std::cout << "esRuta C " << '\n';
-       return false;
-     } else {
-       std::cout << "esRuta D " << '\n';
-       return true;
-     }
- }else{
+bool esRuta(char ruta[]){
 
-     std::cout << "esRuta E " << '\n';
-   return true;
- }
+      int cont=0, i=0;
+      char aux[200];
+
+      strcpy(aux, ruta);
+
+      while (aux[i] != '\0'){
+          if(aux[i] == '/'){
+             cont++;
+          }
+          i++;
+      }
+
+      if (cont == 0){
+        std::cout << "No es ruta return false" << '\n';
+        return false;
+      } else {
+        std::cout << "Es ruta return true" << '\n';
+        return true;
+      }
 
 }
 
-void DameArchivoRuta(char nombreaux[], char nombreArch[], char ruta[]){
+void CortarRuta (const std::string &ruta, char rutaFinal[], char datoFinal[]){
 
-  char nombreRuta[200];
-  char rest[200],aux[200];
-  bool esAbsoluta;
+  std::cout << "Partiendo: " << ruta << '\n';
 
-  strcpy(nombreRuta, nombreaux);
+  //IMPORTANTE, se declara la barra, sin esta declaracion lo demas no anda
+  std::size_t barra = ruta.find_last_of("/\\");
 
-  char * pch;
-  ruta[0] = '\0';
+  //aca se declaran las variables ruta y elemento
+  char rutaa[(ruta.substr(0,barra)).size() + 1];
+  char datoo[(ruta.substr(barra+1)).size() + 1];
 
-  if(PrimerCBarra(nombreRuta)){
-    strcat(ruta,"/");
-  }
+  //Se muestra qe partio bien
+  std::cout << " Ruta: " << ruta.substr(0,barra) << '\n';
+  std::cout << " archivo/carpeta: " << ruta.substr(barra+1) << '\n';
 
-  pch = strtok (nombreRuta,"/");
+  //ahora copiamos los resultados en las variables a devolver
+  strcpy(rutaa, (ruta.substr(0,barra)).c_str());
+  strcpy(datoo, (ruta.substr(barra+1)).c_str());
 
-  strcat(ruta,pch);
-  while(strcmp(pch,strtok(pch,"/"))!=0){
-    strcpy(aux,pch);
-    strcat(ruta,pch);
-    strcat(ruta,"/");
-    pch = strtok (NULL, "/");
-  }
+  //ahora se copian en las originales que devuelve el sistema
+  strcpy (rutaFinal, rutaa);
+  strcpy (datoFinal, datoo);
 
-  strcat(ruta,"*");
-  strcpy(nombreArch,pch);
+  //por ultimo, los mostramos para saber si esta bien
+  std::cout << "------" << '\n';
+  std::cout << rutaFinal << "- Ruta" << '\n';
+  std::cout << datoFinal << "- Dato" << '\n';
+  std::cout << "------" << '\n';
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //PARA COMPROBAR EXISTENCIA
 bool existeDir(Directorio DirCol, char nom[]){
@@ -153,6 +166,7 @@ bool buscoDir(Sistema &s, char nom[]){
         }
 
   } else {
+
     return true;
 
   }
@@ -342,10 +356,23 @@ void borrarDir(Directorio &d, char NombreDir[]){
   }
 }
 
+void borrarLineas(Linea l) {
+  if (!isEmptyArchivoLineas(l)) {
+    borrarLineas(l->sig);
+    delete l;
+    l = NULL;
+  }
+}
+
 void borrarArchivos(Archivo &a){
   //En teoria llego al final de los archivos y ahi los comienza eliminar, hasta llegar al primero
   if (!isEmptyArchivo(a)){
     borrarArchivos(a->sig);
+    if (!isEmptyArchivoLineas(a->lprimero)) {
+      borrarLineas(a->lprimero);
+      a->lprimero = NULL;
+      a->lultimo  = NULL;
+    }
     delete a;
     a = NULL;
   }

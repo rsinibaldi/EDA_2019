@@ -10,13 +10,16 @@
 
 // FUNCIONES AUXILIARES PARA DIRECTORIO
 
+//nuevas
+bool esRuta(char ruta[]);
+void CortarRuta (const std::string &ruta, char rutaFinal[], char datoFinal[]);
+
 //
 bool existeDir(Directorio DirCol, char nom[]);
 bool existeDir2(Sistema &s, char nom[]);
 bool buscoDir(Sistema &s, char nom[]);
 void agregarBarraFinal(char nom[]);
 bool PrimerCBarra(char nombreDirS[]);
-void DameArchivoRuta(char nombreaux[], char nombreArch[], char ruta[]);
 
 //PWD
 void imprimoPadres(Directorio d);
@@ -53,6 +56,7 @@ void inOrden(Directorio d);
 void postOrden(Directorio d);
 void preOrden(Directorio d);
 void borrarTodo(Directorio &d);
+void borrarLineas(Linea l);
 
 
 
