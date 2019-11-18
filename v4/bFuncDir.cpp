@@ -352,10 +352,23 @@ void borrarDir(Directorio &d, char NombreDir[]){
   }
 }
 
+void borrarLineas(Linea l) {
+  if (!isEmptyArchivoLineas(l)) {
+    borrarLineas(l->sig);
+    delete l;
+    l = NULL;
+  }
+}
+
 void borrarArchivos(Archivo &a){
   //En teoria llego al final de los archivos y ahi los comienza eliminar, hasta llegar al primero
   if (!isEmptyArchivo(a)){
     borrarArchivos(a->sig);
+    if (!isEmptyArchivoLineas(a->lprimero)) {
+      borrarLineas(a->lprimero);
+      a->lprimero = NULL;
+      a->lultimo  = NULL;
+    }
     delete a;
     a = NULL;
   }

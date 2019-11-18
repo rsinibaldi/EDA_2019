@@ -4,6 +4,7 @@
 
 #include "aStruct.h"
 #include "cFuncArch.h"
+#include "dFuncLin.h"
 
 
 
@@ -36,6 +37,7 @@ bool isEmptyDirectorio(Directorio d);
 void borrarDir(Directorio &d, char NombreDir[]);
 void borrarArchivos(Archivo &a);
 void borrarSubDir(Directorio &d);
+void borrarLineas(Linea l);
 
 
 // ???
