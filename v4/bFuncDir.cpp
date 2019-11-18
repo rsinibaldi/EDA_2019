@@ -52,10 +52,6 @@ void CortarRuta (const std::string &ruta, char rutaFinal[], char datoFinal[]){
   char rutaa[(ruta.substr(0,barra)).size() + 1];
   char datoo[(ruta.substr(barra+1)).size() + 1];
 
-  //Se muestra qe partio bien
-  std::cout << " Ruta: " << ruta.substr(0,barra) << '\n';
-  std::cout << " archivo/carpeta: " << ruta.substr(barra+1) << '\n';
-
   //ahora copiamos los resultados en las variables a devolver
   strcpy(rutaa, (ruta.substr(0,barra)).c_str());
   strcpy(datoo, (ruta.substr(barra+1)).c_str());
@@ -356,23 +352,10 @@ void borrarDir(Directorio &d, char NombreDir[]){
   }
 }
 
-void borrarLineas(Linea l) {
-  if (!isEmptyArchivoLineas(l)) {
-    borrarLineas(l->sig);
-    delete l;
-    l = NULL;
-  }
-}
-
 void borrarArchivos(Archivo &a){
   //En teoria llego al final de los archivos y ahi los comienza eliminar, hasta llegar al primero
   if (!isEmptyArchivo(a)){
     borrarArchivos(a->sig);
-    if (!isEmptyArchivoLineas(a->lprimero)) {
-      borrarLineas(a->lprimero);
-      a->lprimero = NULL;
-      a->lultimo  = NULL;
-    }
     delete a;
     a = NULL;
   }

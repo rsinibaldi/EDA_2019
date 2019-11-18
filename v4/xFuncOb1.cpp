@@ -6,6 +6,7 @@
 
 // #include "aStruct.h"
 #include "xFuncOb1.h"
+#include "xFuncOb2.h"
 
 
 #include "bFuncDir.h"
@@ -75,13 +76,34 @@ TipoRet CREATE (Sistema &s, char nombreArchivo[]/*, string &mensaje*/){
     char ext[EXT_MAX];
     char aux[200];
     bool encontre = false;
+    char nomCompleto[ARCH_NOM_MAX];
 
-    //Nos quedamos con el directorio actual
+    char ruta[200],dato[200];
+
+    //RUTA
+
+    if(esRuta(nombreArchivo)){
+      CortarRuta(nombreArchivo,ruta,dato);
+
+      if((CD(s,ruta)) == OK){
+        nombreArchivo[0]= '\0';
+        strcpy(nombreArchivo, dato);
+      } else {
+        strcpy (mensaje, "La ruta no es correcta");
+        Respuesta = ERROR;
+        cout << mensaje << endl;
+        return Respuesta;
+      }
+      //------------------------------------
+
+    } else {
+      strcpy(nombreArchivo,nombreArchivo);
+
+    }
+
+
 
     dirActual   = s->dirActual;
-    //Guardamos en nombre antes de partirlo (para poder guardar ordenado)
-    char nomCompleto[ARCH_NOM_MAX];
-    strcpy(nomCompleto,nombreArchivo);
 
     //dividimos nomArch para poder estudiarlo mejor
     strcpy(nom,strtok(nombreArchivo, "."));
@@ -213,6 +235,30 @@ TipoRet IF(Sistema &s, char nombreArchivo[], char texto[]/*, char error[]*/){
   char nom[NOMBRE_MAX]; //nombre del archivo partido
   char ext[EXT_MAX]; //extension archivo partido
   bool encontre = false; // para la func que busca y nos posiciona arriba del arch a insertar
+
+  char ruta[200],dato[200];
+
+  //RUTA
+
+  if(esRuta(nombreArchivo)){
+    CortarRuta(nombreArchivo,ruta,dato);
+
+    if((CD(s,ruta)) == OK){
+      strcpy(nombreArchivo, dato);
+
+    } else {
+      strcpy (mensaje, "La ruta no es correcta");
+      Respuesta = ERROR;
+      cout << mensaje << endl;
+      return Respuesta;
+    }
+    //------------------------------------
+
+  } else {
+    strcpy(nombreArchivo,nombreArchivo);
+
+  }
+
 
   //partimos el nomarch en nom y ext
   strcpy(nom,strtok(nombreArchivo, "."));

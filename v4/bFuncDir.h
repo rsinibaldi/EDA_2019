@@ -56,7 +56,6 @@ void inOrden(Directorio d);
 void postOrden(Directorio d);
 void preOrden(Directorio d);
 void borrarTodo(Directorio &d);
-void borrarLineas(Linea l);
 
 
 

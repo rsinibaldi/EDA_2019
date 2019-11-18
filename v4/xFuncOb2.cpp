@@ -29,16 +29,18 @@ TipoRet MKDIR (Sistema &s, char nombreDirectorio[]/*, string &mensaje*/){
   char nom[NOMBRE_MAX];
   char ruta[200],dato[200];
 
-  //HACER RUTA ABS
+  //RUTA
 
   if(esRuta(nombreDirectorio)){
     CortarRuta(nombreDirectorio,ruta,dato);
-    //SE ESTA CREANDO IGUAL AUNQUE DE ERROR LA RUTA
-    if((CD(s,ruta)) == true){
+
+    if((CD(s,ruta)) == OK){
       strcpy(nom, dato);
     } else {
       strcpy (mensaje, "La ruta no es correcta");
       Respuesta = ERROR;
+      cout << mensaje << endl;
+      return Respuesta;
     }
     //------------------------------------
 
@@ -145,7 +147,32 @@ TipoRet RMDIR (Sistema &s, char nombreDirectorio[]){
   char nomAux[NOMBRE_MAX];
   Directorio DirCol;
 
-  strcpy(nom,nombreDirectorio);
+  char ruta[200],dato[200];
+
+  //RUTA
+
+  if(esRuta(nombreDirectorio)){
+    CortarRuta(nombreDirectorio,ruta,dato);
+
+    if((CD(s,ruta)) == OK){
+      strcpy(nom, dato);
+      std::cout << "1" << '\n';
+
+    } else {
+      strcpy (mensaje, "La ruta no es correcta");
+      Respuesta = ERROR;
+      cout << mensaje << endl;
+      return Respuesta;
+    }
+    //------------------------------------
+
+  } else {
+    std::cout << "2" << '\n';
+    strcpy(nom,nombreDirectorio);
+
+  }
+
+
   //consulto si hay algun otro dir
   DirCol = s->dirActual->der;
   if (!existeDir(DirCol, nom)){

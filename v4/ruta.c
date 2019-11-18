@@ -1,3 +1,35 @@
+// nuevo00000
+bool esRuta(char nom){
+  char nomruta[200];
+  // aca cargarmos el nom en algo manejable
+  strcpy (nomruta, nom});
+  //contador parametros
+  //vemos si tiene mas de un parametro
+  int i=0;
+  int cont=0;
+  while (nomruta[i] != '\0') {
+    if (nomruta[i] == '/') {
+      i++;
+      cont++;
+    }
+  }
+
+  if (cont == 1){
+    //procedimiento normal
+    return false;
+  }else if (cont == 2){
+      if (PrimerCBarra(nomruta)){
+        return false
+      } else {
+        return true;
+      }
+  }else{
+    return true;
+  }
+
+}
+
+
 
 
 //te guardas la posicion en caso de que falle y tengas que resetear
@@ -11,26 +43,14 @@ strcpy (nomruta, nombreDirS);
 agregarBarraFinal(nomruta);
 
 
-
-
-
-
-//consultamos si es abs o relativo
-if(PrimerCBarra(nomruta)){
-  // nos paramos al inicio del arbol y e igualamos el dir col a eso
-  s->dirActual = s->directorio;
-}
-//sino, dejamos el dir actual como esta
-
-
-
-
+//PARTE SE QUEDA CON EL ULTIMO
 if(strcmp(nombreaux, "*") != 0){
   strcpy(aux, strtok(nombreaux, "/"));
   strcpy(resto,  strtok(NULL, "\0"));
   return vuleta
 }
-return resto
+
+resto = al ultimo
 
 
 if (esRuta) {
